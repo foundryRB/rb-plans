@@ -56,7 +56,7 @@ def install_auth(app: FastAPI, settings: Settings) -> None:
             return await call_next(request)
         return Response(
             status_code=401,
-            headers={"WWW-Authenticate": 'Basic realm="vf-plans"'},
+            headers={"WWW-Authenticate": 'Basic realm="rb-plans"'},
         )
 
 

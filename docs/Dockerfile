@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-# The docs image (vf-plans-docs): built like any other image (CI), served by
+# The docs image (rb-plans-docs): built like any other image (CI), served by
 # nginx under DOCS_BASE so the portal's no-rewrite route resolves
 # (INT-FOUNDRY-018).
 FROM node:22-alpine AS build

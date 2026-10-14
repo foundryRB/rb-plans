@@ -9,7 +9,7 @@ services:
         build:
             context: ..
             dockerfile: devops/Dockerfile
-        image: vf-plans-app:latest
+        image: rb-plans-app:latest
         ports:
             # The app listens on 8000 (backend/run.py's default, the same
             # port k8s/values.yaml pins as .Values.port), published on 8080.

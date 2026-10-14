@@ -54,7 +54,7 @@ def _get(path: str, token: str) -> dict:
         f"{_API}{path}",
         headers={
             "Accept": "application/vnd.github+json",
-            "User-Agent": "vf-plans-renderer-pin",
+            "User-Agent": "rb-plans-renderer-pin",
             "Authorization": f"Bearer {token}",
         },
     )

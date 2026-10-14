@@ -1,4 +1,4 @@
-# vf-plans - the CSD-INTENT-01 claim set for P1, Vodafone Plans (v1).
+# rb-plans - the CSD-INTENT-01 claim set for P1, RB Plans (v1).
 #
 # Every claim carries `derived_from` against the 35 P1 requirement IDs, and
 # every requirement maps to a claim here or to the Descoped table on
@@ -276,7 +276,7 @@ INT-PLANS-020:
         type: behavior
     criticality: critical
 
-# --- Versioning (vf-library's principles) ---------------------------------
+# --- Versioning (rb-library's principles) ---------------------------------
 
 INT-PLANS-021:
     version: 1.0.0
@@ -507,8 +507,8 @@ INT-PLANS-038:
 INT-PLANS-039:
     version: 3.0.0
     status: active
-    statement: "Vodafone typography is applied in the cockpit: the Segoe UI sans stack for headings and prose, each with its declared system fallback. The exported artifact takes the identity's stacks from the renderer's sheet (INT-PLANS-020)."
-    rationale: "The cockpit's own chrome wears the approved Vodafone stacks; the plan it renders wears whatever identity the vendored sheet was stamped with, so the engine names no typeface for it."
+    statement: "RB typography is applied in the cockpit: the Segoe UI sans stack for headings and prose, each with its declared system fallback. The exported artifact takes the identity's stacks from the renderer's sheet (INT-PLANS-020)."
+    rationale: "The cockpit's own chrome wears the approved RB system stacks; the plan it renders wears whatever identity the vendored sheet was stamped with, so the engine names no typeface for it."
     derived_from: [UI-001, EXP-001]
     test:
         scope: e2e
@@ -591,7 +591,7 @@ INT-PLANS-044:
         type: invariant
     criticality: high
 
-# The connect-an-agent panel (vf-plans#9). The route half is decided against the
+# The connect-an-agent panel (rb-plans#9). The route half is decided against the
 # running app over a real store; the frontend suite attests the panel half against
 # the same statement.
 INT-PLANS-045:

@@ -30,7 +30,7 @@ intent(
             page.waitForEvent("download"),
             page.getByRole("link", { name: "Export" }).click(),
         ]);
-        const dir = mkdtempSync(join(tmpdir(), "vf-plans-export-"));
+        const dir = mkdtempSync(join(tmpdir(), "rb-plans-export-"));
         const filePath = join(dir, "export.html");
         await download.saveAs(filePath);
         const html = readFileSync(filePath, "utf-8");

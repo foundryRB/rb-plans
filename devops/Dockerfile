@@ -1,4 +1,4 @@
-# The app image (vf-plans-app): the FastAPI backend serving the built
+# The app image (rb-plans-app): the FastAPI backend serving the built
 # React cockpit bundle, the REST API and the MCP door, from one image
 # (ADR-007).
 #

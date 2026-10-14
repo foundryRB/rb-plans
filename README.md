@@ -1,4 +1,4 @@
-# Vodafone Plans
+# RB Plans
 
 Create and manage `REF-Plan` project plans: one write path, immutable versions, standalone HTML export. Three doors - a UI a human drives with no agent, a REST API, and an MCP door for agents - all enter the same use cases, so a write through any door is visible through every other.
 
@@ -49,7 +49,7 @@ The regular e2e configuration runs these checks alongside the database-backed fl
 - `tests/` - the pytest suite; `tests/deployed/` is the one in-cluster verification suite
 - `devops/` - Dockerfile + compose (the released images) + the promotion contract
 - `k8s/` - the Helm chart CI publishes (database + identity-realm wiring, the machine door's key, the docs route)
-- `docs/` - the Starlight docs site, served under the portal at `/apps/vf-plans`
+- `docs/` - the Starlight docs site, served under the portal at `/apps/rb-plans`
 - `intent.yaml` - the app's CSD-INTENT-01 claims
 
 ## Commits

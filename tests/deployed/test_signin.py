@@ -48,6 +48,6 @@ def test_a_person_signs_in_through_the_realm_and_reaches_the_cockpit(
         )
 
         # The Plan Cockpit's own shell, not a login page or an error page.
-        assert "Vodafone Plans" in submitted.text or 'id="root"' in submitted.text, (
+        assert "RB Plans" in submitted.text or 'id="root"' in submitted.text, (
             "signed in, but the served page is not the Plan Cockpit shell"
         )

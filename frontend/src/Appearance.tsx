@@ -1,1 +1,1 @@
-export { Appearance } from './vodafone/Appearance';
+export { Appearance } from './rb/Appearance';

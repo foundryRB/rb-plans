@@ -1,5 +1,5 @@
 [project]
-name = "vf-plans"
+name = "rb-plans"
 version = "0.1.0"
 description = "Create and manage REF-Plan project plans: one write path, immutable versions, standalone HTML export."
 requires-python = ">=3.13"

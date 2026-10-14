@@ -1,11 +1,6 @@
 /* PSA appearance. See docs/src/content/docs/brand.md for the maintained visual ownership. */
 
 
-@font-face { font-family: "Vodafone"; src: url("/fonts/Vodafone-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
-@font-face { font-family: "Vodafone"; src: url("/fonts/Vodafone-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
-@font-face { font-family: "Vodafone"; src: url("/fonts/Vodafone-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
-@font-face { font-family: "Vodafone"; src: url("/fonts/Vodafone-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
-@font-face { font-family: "Vodafone"; src: url("/fonts/Vodafone-800.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: swap; }
 @font-face { font-family: "Familjen Grotesk"; font-style: normal; font-weight: 400 700; font-display: swap; src: url("../assets/fonts/familjen-grotesk-600.woff2") format("woff2"); }
 @font-face { font-family: "IBM Plex Sans"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fonts/ibm-plex-sans-400.woff2") format("woff2"); }
 @font-face { font-family: "IBM Plex Sans"; font-style: normal; font-weight: 500; font-display: swap; src: url("../assets/fonts/ibm-plex-sans-500.woff2") format("woff2"); }
@@ -46,7 +41,7 @@
     --lane-5: 215 16% 47%;
 
     --font-display: var(--font-sans);
-    --font-sans: "Vodafone", -apple-system, "SF Pro Display", "Helvetica Neue", "Segoe UI", Arial, sans-serif;
+    --font-sans: -apple-system, "SF Pro Display", "Helvetica Neue", "Segoe UI", Arial, sans-serif;
     --font-mono: "Cascadia Code",Consolas,monospace;
 }
 
@@ -282,8 +277,7 @@ body{isolation:isolate;font-family:var(--font-sans);font-weight:400}
 @keyframes app-flow{to{translate:0 6vh;rotate:3deg}}
 @keyframes app-rise{0%{opacity:0;transform:translateY(0) scale(.6)}15%{opacity:.5}65%{opacity:.35}100%{opacity:0;transform:translate(16px,-85vh)}}
 html[data-hidden=true] .app-atmosphere *{animation-play-state:paused}
-.vfd-lockup{display:inline-flex;align-items:center;vertical-align:middle}.vfd-lockup .lockup{display:flex;align-items:center;color:hsl(var(--foreground))}.vfd-lockup .lockup-tile{flex:none;width:36px;height:36px}.vfd-lockup .lockup-words{display:flex;flex-direction:column;justify-content:center;min-height:30px;margin-left:10px;padding-left:10px;border-left:1px solid hsl(var(--border));line-height:1.15}.vfd-lockup .lockup-words b{font:700 12.5px var(--font-sans);letter-spacing:.06em}.vfd-lockup .lockup-words i{margin-top:2px;font:600 9px var(--font-mono);font-style:normal;letter-spacing:.22em;text-transform:uppercase;color:hsl(var(--muted-foreground))}.vfd-lockup .lockup-flag{flex:none;width:22px;height:15px;margin-left:10px}
-.app-product{font:500 14px var(--font-sans);color:hsl(var(--muted-foreground));margin-left:12px;letter-spacing:0}
+.rb-lockup{display:inline-flex;align-items:center;vertical-align:middle}.rb-lockup .lockup{display:flex;align-items:center;color:hsl(var(--foreground))}.rb-lockup .lockup-tile{flex:none;width:36px;height:36px}.rb-lockup .lockup-words{display:flex;flex-direction:column;justify-content:center;min-height:30px;margin-left:10px;padding-left:10px;border-left:1px solid hsl(var(--border));line-height:1.15}.rb-lockup .lockup-words b{font:700 12.5px var(--font-sans);letter-spacing:.06em}.rb-lockup .lockup-words i{margin-top:2px;font:600 9px var(--font-mono);font-style:normal;letter-spacing:.22em;text-transform:uppercase;color:hsl(var(--muted-foreground))}.app-product{font:500 14px var(--font-sans);color:hsl(var(--muted-foreground));margin-left:12px;letter-spacing:0}
 .app-appearance{min-height:40px;padding:8px 12px;border:1px solid hsl(var(--input));border-radius:8px;background:hsl(var(--card));color:hsl(var(--foreground));font:500 12px var(--font-sans);cursor:pointer;white-space:nowrap}
 .app-header{display:flex;align-items:center;gap:24px;flex-wrap:wrap;padding:26px 0;border-bottom:1px solid hsl(var(--border))}
 .app-header nav{display:flex;gap:16px;align-items:center;margin-left:auto}
@@ -308,10 +302,10 @@ input,select,textarea{background-color:hsl(var(--card))}
 .plans-panel{padding:24px;border:1px solid hsl(var(--border));border-radius:10px;background:hsl(var(--card) / .96)}.plans-panel h1{margin-top:0}.plans-panel select{padding:.4rem .6rem;border:1px solid hsl(var(--input));border-radius:var(--radius)}table.chrome-table{background:hsl(var(--card))}.app-atmosphere svg{overflow:visible}@media(max-width:640px){.plans-panel{padding:16px;overflow-x:auto}}
 
 /* IDENTITY STAGE: begin */
-/* ── The Digital Engineering stage over the shell's ambient element ─────────────
+/* ── The Software Engineering stage over the shell's ambient element ─────────────
    Dark: gradient, grids, vignette, three drifting glows, rising motes. Light: paper, the faint
-   light grid, solid red motes, a slow neutral light - alive, and never a red wash.
-   Source: design-systems/vodafone-digital-engineering/brand/stage_css.py render_field(). 
+   light grid, solid green motes, a slow neutral light - alive, and never a green wash.
+   Source: design-systems/rb-software-engineering/brand/stage_css.py render_field(). 
    Appended after the shell's own rules, which stay as they are. Reduced motion and print stop it. */
 .app-atmosphere > * { display: none !important; }                      /* the shell's own streams, blobs, particles */
 .app-atmosphere {
@@ -319,10 +313,10 @@ input,select,textarea{background-color:hsl(var(--card))}
   background:
     radial-gradient(72% 72% at 50% 42%, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, 0.55) 100%) 0 0 / cover no-repeat,
     repeating-linear-gradient(rgba(255, 255, 255, 0.022) 0 1px, transparent 1px 4px) 0 0 / auto,
-    linear-gradient(to right, rgba(230, 0, 0, 0.13) 1px, transparent 1px) 0 0 / 160px 160px,
-    linear-gradient(to bottom, rgba(230, 0, 0, 0.13) 1px, transparent 1px) 0 0 / 160px 160px,
-    linear-gradient(to right, rgba(230, 0, 0, 0.07) 1px, transparent 1px) 0 0 / 40px 40px,
-    linear-gradient(to bottom, rgba(230, 0, 0, 0.07) 1px, transparent 1px) 0 0 / 40px 40px,
+    linear-gradient(to right, rgba(0, 168, 107,  0.13) 1px, transparent 1px) 0 0 / 160px 160px,
+    linear-gradient(to bottom, rgba(0, 168, 107,  0.13) 1px, transparent 1px) 0 0 / 160px 160px,
+    linear-gradient(to right, rgba(0, 168, 107,  0.07) 1px, transparent 1px) 0 0 / 40px 40px,
+    linear-gradient(to bottom, rgba(0, 168, 107,  0.07) 1px, transparent 1px) 0 0 / 40px 40px,
     linear-gradient(160deg, #0b0d12 0%, #070910 55%, #04050a 100%) !important;
 }
 .app-atmosphere::before, .app-atmosphere::after { content: "" !important; display: block !important; position: fixed; pointer-events: none; z-index: -1;
@@ -330,11 +324,11 @@ input,select,textarea{background-color:hsl(var(--card))}
 .app-atmosphere::before {
   inset: -25vh -25vw; width: auto; height: auto;
   background:
-    radial-gradient(closest-side, rgba(255, 59, 59, 0.30) 0%, rgba(230, 0, 0, 0.10) 55%, rgba(230, 0, 0, 0) 100%) 4vw -5vh / 81vw 95vh no-repeat,
+    radial-gradient(closest-side, rgba(78, 224, 160,  0.30) 0%, rgba(0, 168, 107,  0.10) 55%, rgba(0, 168, 107,  0) 100%) 4vw -5vh / 81vw 95vh no-repeat,
     radial-gradient(closest-side, rgba(27, 36, 54, 0.85) 0%, rgba(27, 36, 54, 0) 100%) 61vw 50vh / 94vw 105vh no-repeat,
-    radial-gradient(closest-side, rgba(230, 0, 0, 0.16) 0%, rgba(230, 0, 0, 0) 100%) 61vw 3vh / 69vw 75vh no-repeat !important;
+    radial-gradient(closest-side, rgba(0, 168, 107,  0.16) 0%, rgba(0, 168, 107,  0) 100%) 61vw 3vh / 69vw 75vh no-repeat !important;
   will-change: transform;
-  animation: vfpt-drift-a 26s linear infinite !important;
+  animation: rb-drift-a 26s linear infinite !important;
 }
 .app-atmosphere::after {
   inset: 0 auto auto 0; width: 2px; height: 2px; border-radius: 50%; background: none !important;
@@ -359,14 +353,14 @@ input,select,textarea{background-color:hsl(var(--card))}
     93.6vw 87.4vh 0 0.35px rgba(255, 107, 107, 0.57);
   opacity: 0;
   will-change: transform, opacity;
-  animation: vfpt-rise 15s linear -4s infinite !important;
+  animation: rb-rise 15s linear -4s infinite !important;
 }
 :root[data-theme="light"] .app-atmosphere {
   background:
-    linear-gradient(to right, rgba(181, 0, 0, 0.07) 1px, transparent 1px) 0 0 / 160px 160px,
-    linear-gradient(to bottom, rgba(181, 0, 0, 0.07) 1px, transparent 1px) 0 0 / 160px 160px,
-    linear-gradient(to right, rgba(181, 0, 0, 0.035) 1px, transparent 1px) 0 0 / 40px 40px,
-    linear-gradient(to bottom, rgba(181, 0, 0, 0.035) 1px, transparent 1px) 0 0 / 40px 40px,
+    linear-gradient(to right, rgba(0, 122, 77,  0.07) 1px, transparent 1px) 0 0 / 160px 160px,
+    linear-gradient(to bottom, rgba(0, 122, 77,  0.07) 1px, transparent 1px) 0 0 / 160px 160px,
+    linear-gradient(to right, rgba(0, 122, 77,  0.035) 1px, transparent 1px) 0 0 / 40px 40px,
+    linear-gradient(to bottom, rgba(0, 122, 77,  0.035) 1px, transparent 1px) 0 0 / 40px 40px,
     transparent !important;
 }
 :root[data-theme="light"] .app-atmosphere::before {
@@ -377,27 +371,27 @@ input,select,textarea{background-color:hsl(var(--card))}
 }
 :root[data-theme="light"] .app-atmosphere::after {
   box-shadow:
-    2.8vw 81.0vh 0 0.55px rgba(230, 0, 0, 0.58),
-    13.7vw 82.1vh 0 0.11px rgba(230, 0, 0, 0.59),
-    24.9vw 90.5vh 0 0.06px rgba(230, 0, 0, 0.53),
-    33.3vw 91.2vh 0 0.42px rgba(230, 0, 0, 0.44),
-    47.7vw 97.6vh 0 0.39px rgba(230, 0, 0, 0.63),
-    54.9vw 58.6vh 0 0.32px rgba(230, 0, 0, 0.45),
-    65.7vw 67.9vh 0 0.02px rgba(230, 0, 0, 0.58),
-    77.4vw 92.5vh 0 0.31px rgba(230, 0, 0, 0.63),
-    88.3vw 85.2vh 0 0.27px rgba(230, 0, 0, 0.52),
-    10.1vw 96.9vh 0 0.54px rgba(230, 0, 0, 0.46),
-    19.4vw 75.4vh 0 0.32px rgba(230, 0, 0, 0.47),
-    28.4vw 76.2vh 0 0.13px rgba(230, 0, 0, 0.58),
-    38.3vw 61.5vh 0 0.43px rgba(230, 0, 0, 0.56),
-    51.1vw 88.1vh 0 0.22px rgba(230, 0, 0, 0.45),
-    62.9vw 82.2vh 0 0.39px rgba(230, 0, 0, 0.63),
-    74.3vw 72.9vh 0 0.46px rgba(230, 0, 0, 0.55),
-    83.3vw 85.1vh 0 0.19px rgba(230, 0, 0, 0.46),
-    93.6vw 87.4vh 0 0.35px rgba(230, 0, 0, 0.57);
+    2.8vw 81.0vh 0 0.55px rgba(0, 168, 107,  0.58),
+    13.7vw 82.1vh 0 0.11px rgba(0, 168, 107,  0.59),
+    24.9vw 90.5vh 0 0.06px rgba(0, 168, 107,  0.53),
+    33.3vw 91.2vh 0 0.42px rgba(0, 168, 107,  0.44),
+    47.7vw 97.6vh 0 0.39px rgba(0, 168, 107,  0.63),
+    54.9vw 58.6vh 0 0.32px rgba(0, 168, 107,  0.45),
+    65.7vw 67.9vh 0 0.02px rgba(0, 168, 107,  0.58),
+    77.4vw 92.5vh 0 0.31px rgba(0, 168, 107,  0.63),
+    88.3vw 85.2vh 0 0.27px rgba(0, 168, 107,  0.52),
+    10.1vw 96.9vh 0 0.54px rgba(0, 168, 107,  0.46),
+    19.4vw 75.4vh 0 0.32px rgba(0, 168, 107,  0.47),
+    28.4vw 76.2vh 0 0.13px rgba(0, 168, 107,  0.58),
+    38.3vw 61.5vh 0 0.43px rgba(0, 168, 107,  0.56),
+    51.1vw 88.1vh 0 0.22px rgba(0, 168, 107,  0.45),
+    62.9vw 82.2vh 0 0.39px rgba(0, 168, 107,  0.63),
+    74.3vw 72.9vh 0 0.46px rgba(0, 168, 107,  0.55),
+    83.3vw 85.1vh 0 0.19px rgba(0, 168, 107,  0.46),
+    93.6vw 87.4vh 0 0.35px rgba(0, 168, 107,  0.57);
 }
-@keyframes vfpt-drift-a { 0%, 100% { transform: translate(0, 0); } 33.33% { transform: translate(8.6vw, 8.7vh); } 66.67% { transform: translate(-3.9vw, 5.1vh); } }
-@keyframes vfpt-rise {
+@keyframes rb-drift-a { 0%, 100% { transform: translate(0, 0); } 33.33% { transform: translate(8.6vw, 8.7vh); } 66.67% { transform: translate(-3.9vw, 5.1vh); } }
+@keyframes rb-rise {
   0%   { transform: translateY(0); opacity: 0; }
   25%  { opacity: 1; }
   70%  { opacity: 1; }

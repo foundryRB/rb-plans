@@ -36,7 +36,7 @@ def create_app() -> FastAPI:
     service = PlanService(store)
     mcp_server = build_mcp_server(service)
 
-    app = FastAPI(title="vf-plans", version=__version__, lifespan=_lifespan(mcp_server))
+    app = FastAPI(title="rb-plans", version=__version__, lifespan=_lifespan(mcp_server))
 
     # The machine door takes the app's own key; the human surfaces are
     # served only behind the identity realm's sign-in (ADR-008).

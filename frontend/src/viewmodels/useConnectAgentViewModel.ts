@@ -6,7 +6,7 @@ import { api } from "../api/client";
 export const CREDENTIAL_PLACEHOLDER = "<credential>";
 
 export function connectCommand(origin: string, credential: string | null): string {
-    return `claude mcp add --scope user --transport http vf-plans ${origin}/mcp --header "Authorization: Basic ${credential ?? CREDENTIAL_PLACEHOLDER}"`;
+    return `claude mcp add --scope user --transport http rb-plans ${origin}/mcp --header "Authorization: Basic ${credential ?? CREDENTIAL_PLACEHOLDER}"`;
 }
 
 /** Connect agent (INT-PLANS-045): the one-liner that connects an MCP client

@@ -66,7 +66,7 @@ def _resolve_user_or_client(admin_dir: Path, value: str) -> str:
     password-grant admin whose *password* is a secret key
     (`realmAdminPassword`) but whose *username* is a fixed, non-secret
     literal fixed by the realm's own rendered config
-    (`vf-plans-admin`) - there is no file to read for it. Try the file
+    (`rb-plans-admin`) - there is no file to read for it. Try the file
     first (keeps the client_credentials shape working unchanged); fall
     back to the value itself as a literal when no such file exists.
     """
@@ -174,7 +174,7 @@ def realm_test_user_password(verify_inputs: dict[str, str]) -> str:
                 "username": username,
                 "enabled": True,
                 "emailVerified": True,
-                "email": f"{username}@vf-plans.invalid",
+                "email": f"{username}@rb-plans.invalid",
                 "firstName": "Deployed",
                 "lastName": "Verification",
                 "requiredActions": [],

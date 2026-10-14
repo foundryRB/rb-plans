@@ -1,5 +1,5 @@
 ---
-title: "Vodafone Plans"
+title: "RB Plans"
 type: Overview
 summary: "Create and manage REF-Plan project plans - one write path, immutable versions, standalone HTML export."
 id: DOC-INDEX
@@ -7,7 +7,7 @@ status: Active
 updated: "2026-10-04"
 ---
 
-vf-plans stores and versions `REF-Plan` project plans behind three doors over one write path - a UI a human drives with no agent, a REST API, and an MCP door where a workshop's capture lands - and exports any plan as one standalone, self-contained HTML file that renders identically offline.
+rb-plans stores and versions `REF-Plan` project plans behind three doors over one write path - a UI a human drives with no agent, a REST API, and an MCP door where a workshop's capture lands - and exports any plan as one standalone, self-contained HTML file that renders identically offline.
 
 ## The three doors
 

@@ -32,7 +32,7 @@ def test_the_vendored_renderer_still_matches_its_recorded_pin() -> None:
 
     # The manifest is the SINGLE home for the pin: repo, source, commit, and a hash per
     # file. A second copy of the commit elsewhere is a second thing to forget.
-    assert manifest["repo"] == "VFPT-VODAFONE-FOUNDRY/adf-playbook"
+    assert manifest["repo"] == "foundryRB/rb-playbook"
     assert manifest["source"] == "galaxies/press/skills/bootstrap-plan/renderer"
     assert len(manifest["ref"]) == 40 and all(c in "0123456789abcdef" for c in manifest["ref"])
 
@@ -104,7 +104,7 @@ def test_no_workflow_makes_this_repo_depend_on_the_playbook() -> None:
     """
     for workflow in (_REPO / ".github" / "workflows").glob("*.yml"):
         body = workflow.read_text(encoding="utf-8")
-        assert "VFPT-VODAFONE-FOUNDRY/adf-playbook" not in body, (
+        assert "foundryRB/rb-playbook" not in body, (
             f"{workflow.name} reaches the playbook repo. The vendored pin exists so this "
             f"build is hermetic; checking it against upstream is an operator act "
             f"(renderer/check_pin_drift.py), not a pipeline's."

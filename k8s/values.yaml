@@ -1,4 +1,4 @@
-# Chart defaults. The deploy-<install> branch nests these under `vf-plans:` (the
+# Chart defaults. The deploy-<install> branch nests these under `rb-plans:` (the
 # chart ships as a dependency) and pins the served tags; Image Updater
 # advances them there (ADR-022). `host` is per install: the hostname lands
 # in the deploy branch's values (install-agnostic chart, INT-FOUNDRY-046).
@@ -9,16 +9,16 @@ host: ""
 # ungated path.
 port: 8000
 gateway:
-    name: vf-plans
+    name: rb-plans
     namespace: network
 imagePullSecrets:
     - name: ghcr-pull
 images:
     app:
-        repository: ghcr.io/vfpt-vodafone-foundry/vf-plans-app
+        repository: ghcr.io/foundryrb/rb-plans-app
         tag: latest
     docs:
-        repository: ghcr.io/vfpt-vodafone-foundry/vf-plans-docs
+        repository: ghcr.io/foundryrb/rb-plans-docs
         tag: latest
 
 # Capability wiring. The identity grant is required: the sidecar always runs.
@@ -30,8 +30,8 @@ auth:
         # out of this Secret; map them key by key onto OAUTH2_PROXY_CLIENT_SECRET
         # and OAUTH2_PROXY_COOKIE_SECRET, never with envFrom, whose variable
         # names would be the Secret's keys rather than the ones the proxy reads.
-        existingSecret: keycloak-vf-plans
-        clientId: vf-plans
+        existingSecret: keycloak-rb-plans
+        clientId: rb-plans
         issuer: ""
     proxyImage: quay.io/oauth2-proxy/oauth2-proxy:v7.7.1
 database:
@@ -44,18 +44,18 @@ database:
     enabled: true
     host: shared-rw.databases.svc.cluster.local
     port: 5432
-    name: vf-plans
+    name: rb-plans
     user: ""
-    existingSecret: pg-app-vf-plans
+    existingSecret: pg-app-rb-plans
 events:
     # foundry-onboard-events. Two Secrets, because the grant keeps the private
-    # half home: `nats-vf-plans` (key `seed`) is the keypair this app's own
+    # half home: `nats-rb-plans` (key `seed`) is the keypair this app's own
     # generator minted in this namespace, never reflected anywhere;
-    # `nats-jwt-vf-plans` (key `user.jwt`) is the user JWT the platform signed for
+    # `nats-jwt-rb-plans` (key `user.jwt`) is the user JWT the platform signed for
     # its public half and reflected back. The deployment assembles the two
     # into the one credentials file a NATS client reads. `servers` is the
     # bus's in-cluster address; it has no public one.
     enabled: false
     servers: nats://nats.messaging.svc.cluster.local:4222
-    seedSecret: nats-vf-plans
-    jwtSecret: nats-jwt-vf-plans
+    seedSecret: nats-rb-plans
+    jwtSecret: nats-jwt-rb-plans

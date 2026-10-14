@@ -4,7 +4,7 @@ import { createPlanThroughUi, uniqueId } from "./helpers";
 
 intent("INT-PLANS-001", "the engine serves the Plan Cockpit application shell at the root path", async ({ page }) => {
     await page.goto("/");
-    await expect(page).toHaveTitle(/Vodafone Plans/);
+    await expect(page).toHaveTitle(/RB Plans/);
     await expect(page.getByRole("heading", { name: "Plans" })).toBeVisible();
 });
 

@@ -18,7 +18,7 @@ from backend.usecases.service import PlanService
 __all__ = ["build_mcp_server"]
 
 _INSTRUCTIONS = (
-    "vf-plans: create and manage REF-Plan project plans. Every write lands a "
+    "rb-plans: create and manage REF-Plan project plans. Every write lands a "
     "new, immutable version (VER-001) - nothing is ever edited in place. "
     "create_plan seeds a plan from a full REF-Plan section 3 dataset; get_plan "
     "reads the latest (or a named) version; upsert_item adds or updates one "
@@ -42,7 +42,7 @@ def _transport_security() -> TransportSecuritySettings | None:
 
 def build_mcp_server(service: PlanService) -> FastMCP:
     server = FastMCP(
-        "vf-plans",
+        "rb-plans",
         instructions=_INSTRUCTIONS,
         streamable_http_path="/",
         stateless_http=True,

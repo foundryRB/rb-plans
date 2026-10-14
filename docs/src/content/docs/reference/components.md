@@ -7,12 +7,12 @@ status: Active
 updated: "2026-10-04"
 ---
 
-Vodafone Plans ships an application image and a documentation image. The application serves the cockpit and its API doors; the documentation image serves this reference site.
+RB Plans ships an application image and a documentation image. The application serves the cockpit and its API doors; the documentation image serves this reference site.
 
 ## Components
 
 - `app` - the released application image: a Python/FastAPI hexagonal backend serving the built React cockpit bundle, the REST API, and the `/mcp` door, from one image.
-- `docs` - this site, served under the docs portal at `/apps/vf-plans`.
+- `docs` - this site, served under the docs portal at `/apps/rb-plans`.
 
 ## Repository layout
 

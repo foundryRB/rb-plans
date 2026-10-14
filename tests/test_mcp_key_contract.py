@@ -30,9 +30,9 @@ def _read(path: Path) -> str:
 def _render(template: str) -> list[dict]:
     rendered = subprocess.run(
         [
-            "helm", "template", "vf-plans", str(_CHART), "-n", "vf-plans",
+            "helm", "template", "rb-plans", str(_CHART), "-n", "rb-plans",
             "-s", f"templates/{template}",
-            "--set", "host=vf-plans.invalid",
+            "--set", "host=rb-plans.invalid",
         ],
         check=True,
         capture_output=True,
@@ -82,8 +82,8 @@ def test_the_rendered_mint_runs_ahead_of_the_deployment_scoped_to_its_one_secret
 
     pod = job["spec"]["template"]["spec"]
     assert pod["serviceAccountName"] == docs["ServiceAccount"]["metadata"]["name"]
-    assert "kubectl create secret generic vf-plans-mcp -n vf-plans" in pod["containers"][0]["args"][0]
+    assert "kubectl create secret generic rb-plans-mcp -n rb-plans" in pod["containers"][0]["args"][0]
     named = [rule for rule in docs["Role"]["rules"] if rule.get("resourceNames")]
     assert named == [
-        {"apiGroups": [""], "resources": ["secrets"], "resourceNames": ["vf-plans-mcp"], "verbs": ["get", "patch"]}
+        {"apiGroups": [""], "resources": ["secrets"], "resourceNames": ["rb-plans-mcp"], "verbs": ["get", "patch"]}
     ]

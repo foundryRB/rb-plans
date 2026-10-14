@@ -28,7 +28,7 @@
 set -euo pipefail
 
 ref="${1:-main}"
-repo="VFPT-VODAFONE-FOUNDRY/adf-playbook"
+repo="foundryRB/rb-playbook"
 skill="galaxies/press/skills/bootstrap-plan/renderer"
 here="$(cd "$(dirname "$0")" && pwd)"
 root="$(cd "${here}/.." && pwd)"

@@ -59,7 +59,7 @@ intent(
             page.waitForEvent("download"),
             page.getByRole("link", { name: "Export" }).click(),
         ]);
-        const dir = mkdtempSync(join(tmpdir(), "vf-plans-contrast-"));
+        const dir = mkdtempSync(join(tmpdir(), "rb-plans-contrast-"));
         const filePath = join(dir, "export.html");
         await download.saveAs(filePath);
         const html = readFileSync(filePath, "utf-8");
@@ -76,10 +76,10 @@ intent(
 
 intent(
     "INT-PLANS-039",
-    "Vodafone typography is applied to headings and body text in the cockpit",
+    "RB typography is applied to headings and body text in the cockpit",
     async ({ page }) => {
         await page.goto("/");
-        const titleFont = await page.locator(".vfd-lockup b").first().evaluate((el) => getComputedStyle(el).fontFamily);
+        const titleFont = await page.locator(".rb-lockup b").first().evaluate((el) => getComputedStyle(el).fontFamily);
         expect(titleFont).toContain("Segoe UI");
         const bodyFont = await page.locator("body").evaluate((el) => getComputedStyle(el).fontFamily);
         expect(bodyFont).toContain("Segoe UI");

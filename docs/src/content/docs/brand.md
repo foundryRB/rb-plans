@@ -4,10 +4,10 @@ id: DOC-BRAND
 type: Reference
 status: Active
 updated: "2026-09-17"
-summary: "The Vodafone Portugal Digital identity and the source files that own it."
+summary: "The RB Software Engineering identity and the source files that own it."
 ---
 
-The application wears the Vodafone Portugal Digital identity: a near-black stage in dark and paper in light, the lockup (speechmark, "Digital Engineering" over "Vodafone Portugal", the flag) as the one mark, the brand's red as the primary with the darker `#C40000` for link and accent text (WCAG AA on the paper ground), the brand face for text and Cascadia Code for identifiers. The product name sits beside the lockup. An exported plan carries the same lockup and neutrals; lane, status and priority colours are data and stay as validated.
+The application wears the RB Software Engineering identity: a near-black stage in dark and paper in light, the lockup (the RB tile, "Software Engineering" over "RB") as the one mark, the brand's green as the primary with the darker `#007a4d` for link and accent text (WCAG AA on the paper ground), system fonts for text and Cascadia Code for identifiers. The product name sits beside the lockup. An exported plan carries the same lockup and neutrals; lane, status and priority colours are data and stay as validated.
 
 ## Application source
 

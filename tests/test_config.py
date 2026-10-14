@@ -18,7 +18,7 @@ def test_discrete_path_refuses_to_start_with_an_unset_owner_role() -> None:
         database_url=None,
         database_host="shared-rw.databases.svc.cluster.local",
         database_port="5432",
-        database_name="vf-plans",
+        database_name="rb-plans",
         database_user="",
         database_password="",
         mcp_user="",
@@ -51,8 +51,8 @@ def test_discrete_path_composes_the_dsn_when_the_owner_role_is_set() -> None:
         database_url=None,
         database_host="shared-rw.databases.svc.cluster.local",
         database_port="5432",
-        database_name="vf-plans",
-        database_user="vf-plans-owner",
+        database_name="rb-plans",
+        database_user="rb-plans-owner",
         database_password="secret",
         mcp_user="",
         mcp_password="",
@@ -60,5 +60,5 @@ def test_discrete_path_composes_the_dsn_when_the_owner_role_is_set() -> None:
         auth_scope="mcp",
     )
     dsn = database_dsn(settings)
-    assert dsn.startswith("postgresql://vf-plans-owner:secret@")
-    assert "shared-rw.databases.svc.cluster.local:5432/vf-plans" in dsn
+    assert dsn.startswith("postgresql://rb-plans-owner:secret@")
+    assert "shared-rw.databases.svc.cluster.local:5432/rb-plans" in dsn

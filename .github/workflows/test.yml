@@ -1,4 +1,4 @@
-# vf-plans app-owned test suites. Deliberately NOT a thin caller: build.yml is shared
+# rb-plans app-owned test suites. Deliberately NOT a thin caller: build.yml is shared
 # because release and publish must not drift, but a test suite is genuinely per-app
 # (a pytest, a vitest, a Playwright e2e), so there is nothing to share. What IS
 # contract is that this file exists and runs on pull_request, so a contributor's PR

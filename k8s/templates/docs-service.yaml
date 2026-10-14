@@ -4,7 +4,7 @@ metadata:
   # The platform's docs HTTPRoute targets the DERIVED backendRef (svc- prefix
   # exactly when the chart name leads with a digit, INT-FOUNDRY-056), so the
   # name is rendered literally here rather than templated.
-  name: vf-plans-docs
+  name: rb-plans-docs
   labels:
     app.kubernetes.io/component: docs
 spec:

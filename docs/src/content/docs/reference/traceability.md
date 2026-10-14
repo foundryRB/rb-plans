@@ -13,7 +13,7 @@ updated: "2026-10-04"
 
 | REQ | Why |
 | --- | --- |
-| POS-001 | States that vf-plans is delivered through the standard delivery line - a fact about this delivery process, not the software, which no test in this repo can decide. Attested operationally by the delivery line itself: four recorded gates and the evidence chain, reachable from the `delivered/vf-plans/P1` tag. |
+| POS-001 | States that rb-plans is delivered through the standard delivery line - a fact about this delivery process, not the software, which no test in this repo can decide. Attested operationally by the delivery line itself: four recorded gates and the evidence chain, reachable from the `delivered/rb-plans/P1` tag. |
 
 ## Requirement to claim
 

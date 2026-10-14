@@ -2,18 +2,18 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
 // base derives from DOCS_BASE so the site mounts under the portal prefix
-// (/apps/vf-plans); the Dockerfile places the built files under the same prefix
+// (/apps/rb-plans); the Dockerfile places the built files under the same prefix
 // because Astro's output is flat (INT-FOUNDRY-018, ADR-023).
 export default defineConfig({
     base: process.env.DOCS_BASE || '/',
     integrations: [
         starlight({
-            title: 'Vodafone Plans',
+            title: 'RB Plans',
             description:
                 'Create and manage REF-Plan project plans - one write path, immutable versions, standalone HTML export.',
             components: { SiteTitle: './src/components/SiteTitle.astro' },
-            logo: { light: './src/assets/vfpt-lockup-light.svg', dark: './src/assets/vfpt-lockup-dark.svg', alt: 'Digital Engineering, Vodafone Portugal' },
-            customCss: ['@psa-department-of-engineering/starlight-theme/styles.css', './src/styles/vodafone.css'],
+            logo: { light: './src/assets/rb-lockup-light.svg', dark: './src/assets/rb-lockup-dark.svg', alt: 'Software Engineering, RB' },
+            customCss: ['@psa-department-of-engineering/starlight-theme/styles.css', './src/styles/rb.css'],
             head: [
                 {
                     tag: 'link',
