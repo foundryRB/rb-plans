@@ -1,0 +1,32 @@
+{
+    "name": "vf-plans-cockpit",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "predev": "node ../renderer/project-to-frontend.mjs",
+        "dev": "vite",
+        "prebuild": "node ../renderer/project-to-frontend.mjs",
+        "build": "tsc -b && vite build",
+        "pretest": "node ../renderer/project-to-frontend.mjs",
+        "test": "vitest run",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
+        "react-router-dom": "^7.18.0"
+    },
+    "devDependencies": {
+        "@psa-department-of-engineering/vitest-intent": "^2.0.1",
+        "@testing-library/jest-dom": "^6.6.3",
+        "@testing-library/react": "^16.0.1",
+        "@types/node": "^22.10.2",
+        "@types/react": "^18.3.12",
+        "@types/react-dom": "^18.3.1",
+        "@vitejs/plugin-react": "^4.3.4",
+        "jsdom": "^25.0.1",
+        "typescript": "^5.7.2",
+        "vite": "^6.4.3",
+        "vitest": "^4.1.11"
+    }
+}

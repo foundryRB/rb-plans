@@ -1,0 +1,239 @@
+/* The plan instrument's presentation: layout, the five categorical lane hues and the
+   reserved status trio, which carry meaning and stay owned here. The brand values are
+   NOT here: they arrive in the PRESS palette block at the end of this file, stamped
+   from the design hub, so this sheet never names a colour that claims to be the brand. */
+
+.pr-root {
+
+    /* Interactive boundaries meet non-text contrast independently of hairlines. */
+    --input: #7C8A98;
+    --lane-1: #3B67C4;
+    --lane-2: #C2703E;
+    --lane-3: #8348A8;
+    --lane-4: #2E7F86;
+    --lane-5: #64748B;
+
+    --radius: 0.375rem;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .pr-root {
+
+        --lane-1: #6C93DE;
+        --lane-2: #C07A45;
+        --lane-3: #A873C9;
+        --lane-4: #5FB0A8;
+        --lane-5: #8A99A8;
+
+        --input: #637183;
+    }
+}
+
+:root[data-theme="dark"] .pr-root {
+
+    --lane-1: #6C93DE;
+    --lane-2: #C07A45;
+    --lane-3: #A873C9;
+    --lane-4: #5FB0A8;
+    --lane-5: #8A99A8;
+
+    --input: #637183;
+}
+
+.pr-root {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.55;
+    min-width: 0;
+    color: var(--ink);
+    background: var(--panel);
+    max-width: 1280px;
+    margin: 0 auto;
+    border: 1px solid var(--edge);
+    border-radius: 14px;
+    overflow: clip;
+
+    /* The ground for the page AROUND this card, not for the card itself. These
+       tokens are scoped to .pr-root, so a page cannot say var(--bg); a consumer
+       that owns the whole page (the exported file, the scaffolded plan) reads
+       the value off this sheet rather than keeping a copy of its own, which is
+       how an export once kept a ground the sheet had already left behind. It is
+       declared here, and used by nothing here, for exactly that reason. */
+    --page: var(--bg);
+}
+.pr-root * { box-sizing: border-box; }
+.pr-root a { color: var(--link); }
+.pr-mono { font-family: var(--font-mono); }
+
+/* Masthead. The plan sits on the surface, not on a separate dark band, so the
+   only thing that distinguishes the masthead is the brand's own light falling
+   across its corner. Mixed from --brand rather than typed, so an identity that
+   names a different brand colour gets its own glow and no one has to find this
+   rule to change it. */
+.pr-wordmark { margin-bottom: 24px; }
+.pr-wordmark .lockup { display: flex; align-items: center; color: var(--ink); }
+.pr-wordmark .lockup-tile { flex: none; width: 40px; height: 40px; }
+.pr-wordmark .lockup-words { display: flex; flex-direction: column; justify-content: center; min-height: 32px; margin-left: 10px; padding-left: 10px; border-left: 1px solid var(--edge); line-height: 1.15; }
+.pr-wordmark .lockup-words b { font: 700 13px var(--font-sans); letter-spacing: 0.06em; }
+.pr-wordmark .lockup-words i { margin-top: 2px; font: 600 9.5px var(--font-mono); font-style: normal; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+.pr-wordmark .lockup-flag { flex: none; width: 24px; height: 16px; margin-left: 10px; }
+.pr-band {
+    background:
+        radial-gradient(ellipse at 100% 0, color-mix(in srgb, var(--brand) 12%, transparent), transparent 65%),
+        var(--panel);
+    color: var(--ink);
+    padding: 32px;
+}
+.pr-band h1 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(28px, 4vw, 40px);
+    letter-spacing: -0.025em;
+    margin: 0 0 0.25rem;
+}
+.pr-band .pr-version { font-family: var(--font-mono); color: var(--muted); font-size: 0.85rem; }
+.pr-band .pr-focus { max-width: 70ch; margin: 0.5rem 0 1rem; color: var(--muted); }
+.pr-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--edge); }
+.pr-stat { min-width: 6rem; }
+.pr-stat .pr-stat-num { font-family: var(--font-display); font-size: 1.75rem; font-weight: 600; line-height: 1.25; }
+.pr-stat .pr-stat-label { font-family: var(--font-mono); font-size: 0.75rem; margin-top: 0.35rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+
+.pr-stat-next .pr-stat-num { font-size: 1.125rem; line-height: 1.4; overflow-wrap: anywhere; }
+
+/* Navigation has its own reading row; filters occupy the working row below it. */
+.pr-sticky { position: sticky; top: 0; z-index: 5; background: var(--panel); border-block: 1px solid var(--edge); padding: 0 1.5rem; }
+.pr-anchors { display: flex; flex-wrap: wrap; gap: 0.25rem; padding: 0.5rem 0; border-bottom: 1px solid var(--edge); font: 500 0.9375rem var(--font-sans); }
+.pr-anchors a { display: inline-flex; align-items: center; min-height: 44px; padding: 0.5rem 0.75rem; border-radius: var(--radius); color: var(--ink); text-decoration: none; }
+.pr-anchors a:hover, .pr-anchors a:focus-visible { background: var(--raised); text-decoration: underline; text-underline-offset: 0.3em; }
+.pr-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.5rem; padding: 1rem 0; }
+.pr-filter-label { font: 500 0.75rem var(--font-mono); color: var(--muted); margin-right: 0.25rem; }
+.pr-pillrow { display: flex; gap: 0.375rem; flex-wrap: wrap; align-items: center; }
+.pr-pill { font: 500 0.8125rem var(--font-sans); min-height: 32px; padding: 0.3rem 0.65rem; border-radius: var(--radius); border: 1px solid var(--input); background: var(--panel); color: var(--ink); cursor: pointer; display: inline-flex; align-items: center; gap: 0.375rem; }
+.pr-pill[aria-pressed="true"], .pr-pill[aria-checked="true"] {
+    background: var(--brand);
+    color: var(--action-ink);
+    border-color: var(--brand);
+}
+.pr-root :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+.pr-swatch { flex: none; width: 0.6rem; height: 0.6rem; border-radius: 50%; display: inline-block; }
+.pr-swatch.pr-lane-1 { background: var(--lane-1); }
+.pr-swatch.pr-lane-2 { background: var(--lane-2); }
+.pr-swatch.pr-lane-3 { background: var(--lane-3); }
+.pr-swatch.pr-lane-4 { background: var(--lane-4); }
+.pr-swatch.pr-lane-5 { background: var(--lane-5); }
+.pr-swatch.pr-lane-none { background: var(--panel); border: 1px solid var(--input); }
+
+/* Sections */
+.pr-section { padding: 2rem 1.5rem; scroll-margin-top: 12rem; border-bottom: 1px solid var(--edge); }
+.pr-section h2 { font-family: var(--font-display); font-size: 1.375rem; font-weight: 600; letter-spacing: -0.015em; line-height: 1.3; margin: 0 0 0.375rem; }
+.pr-count { font-family: var(--font-mono); color: var(--muted); font-size: 0.8125rem; margin: 0 0 1.25rem; }
+
+/* Tables keep their reading width inside their own keyboard-scrollable region. */
+.pr-table-scroll { overflow-x: auto; border: 1px solid var(--edge); border-radius: var(--radius); }
+.pr-table { width: 100%; min-width: 960px; border-collapse: collapse; table-layout: fixed; }
+.pr-table-workstreams { min-width: 700px; }
+.pr-table-risks { min-width: 620px; }
+.pr-col-id { width: 7rem; }
+.pr-col-owner { width: 9rem; }
+.pr-col-lane { width: 8rem; }
+.pr-col-priority { width: 6rem; }
+.pr-col-due { width: 7rem; }
+.pr-col-status { width: 7rem; }
+.pr-table th { text-align: left; font: 500 0.7rem var(--font-mono); text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); padding: 0.75rem; background: var(--raised); border-bottom: 1px solid var(--edge); }
+.pr-table td { line-height: 1.55; padding: 0.85rem 0.75rem; border-bottom: 1px solid var(--edge); vertical-align: top; font-size: 1rem; overflow-wrap: anywhere; }
+.pr-table tbody:last-child > tr:last-child td, .pr-table tbody:last-child > .pr-summary-row:has(+ tr[hidden]) td { border-bottom: 0; }
+.pr-item-id, .pr-date { white-space: nowrap; font-size: 0.75rem; }
+.pr-item-id { color: var(--muted); }
+.pr-row-toggle { width: 100%; background: none; border: none; cursor: pointer; color: var(--ink); font: inherit; padding: 0; display: flex; align-items: baseline; gap: 0.5rem; text-align: left; line-height: inherit; }
+.pr-row-label { min-width: 0; overflow-wrap: anywhere; }
+.pr-row-label > .pr-chip, .pr-row-label > .pr-badge { margin-left: 0.5rem; vertical-align: middle; }
+.pr-row-toggle:hover .pr-row-label { text-decoration: underline; text-underline-offset: 0.2em; }
+.pr-caret { flex: none; display: inline-block; transition: transform 0.15s; }
+.pr-row-toggle[aria-expanded="true"] .pr-caret { transform: rotate(90deg); }
+.pr-disclosure { padding: 0.85rem 0; border-bottom: 1px solid var(--edge); }
+.pr-detail { padding: 0.75rem 0 0.25rem 1.1rem; font-size: 1rem; line-height: 1.6; color: var(--muted); overflow-wrap: anywhere; }
+.pr-detail p { width: min(80ch, calc(100vw - 7rem)); margin: 0 0 0.75rem; max-width: 80ch; white-space: pre-wrap; }
+.pr-detail p:last-child { margin-bottom: 0; }
+.pr-detail-row > td { background: var(--panel); padding: 1.1rem 1.5rem; }
+.pr-detail-row .pr-detail { padding: 0.25rem 0 0.5rem 1rem; border-left: 2px solid var(--edge); }
+.pr-id-link { font-family: var(--font-mono); font-size: 0.8rem; }
+.pr-note { border-left: 3px solid var(--edge); padding: 0.5rem 0.75rem; background: var(--raised); }
+.pr-highlight { outline: 2px solid var(--focus); outline-offset: -2px; }
+
+/* Chips and badges */
+.pr-chip { max-width: 100%; line-height: 1.35; display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.15rem 0.5rem; border-radius: 999px; font-size: 0.75rem; background: var(--panel); }
+.pr-chip.pr-ok { border: 1px solid var(--ok); color: var(--ok); }
+.pr-chip.pr-warn { border: 1px solid var(--warn); color: var(--warn); }
+.pr-chip.pr-crit { border: 1px solid var(--crit); color: var(--crit); }
+.pr-chip.pr-muted { border: 1px solid var(--muted); color: var(--muted); }
+.pr-badge { display: inline-block; padding: 0.1rem 0.4rem; border-radius: 0.25rem; font-size: 0.7rem; font-family: var(--font-mono); }
+.pr-badge.pr-filled { background: var(--ink); color: var(--panel); }
+.pr-badge.pr-outline { border: 1px solid var(--ink); color: var(--ink); }
+.pr-badge.pr-crit-outline { border: 1px solid var(--crit); color: var(--crit); }
+
+/* Milestone rail */
+.pr-rail { display: flex; gap: 0.75rem; overflow-x: auto; padding-bottom: 0.5rem; }
+.pr-rail-card { flex: 0 0 14rem; min-width: 0; overflow-wrap: anywhere; border: 1px solid var(--edge); border-left: 3px solid var(--lane-1); border-radius: var(--radius); padding: 0.5rem 0.65rem; background: var(--panel); }
+.pr-rail-card .pr-rail-date { font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); }
+
+/* Schedule */
+.pr-schedule-toolbar { display: flex; gap: 1rem; align-items: center; margin-bottom: 0.5rem; font-size: 0.8rem; flex-wrap: wrap; }
+.pr-switch-track { width: 2.5rem; flex: none; display: inline-flex; align-items: center; border: 1px solid var(--input); border-radius: 999px; padding: 2px; background: var(--panel); cursor: pointer; }
+.pr-switch-track[aria-checked="true"] .pr-switch-knob { transform: translateX(1rem); background: var(--accent); }
+.pr-switch-knob { width: 1rem; height: 1rem; border-radius: 50%; background: var(--muted); display: block; transition: transform 0.15s; }
+.pr-schedule-scroll { overflow-x: auto; border: 1px solid var(--edge); border-radius: var(--radius); }
+.pr-legend { display: flex; gap: 1rem; flex-wrap: wrap; font-size: 0.75rem; margin-top: 0.5rem; color: var(--muted); }
+.pr-legend-swatch { width: 0.65rem; height: 0.65rem; display: inline-block; margin-right: 0.3rem; vertical-align: middle; }
+
+.pr-legend > div { display: flex; flex-wrap: wrap; gap: 0.75rem 1.25rem; }
+
+/* Decision log */
+.pr-log-day { border: 1px solid var(--edge); border-radius: var(--radius); margin-bottom: 0.5rem; }
+.pr-log-day-head { gap: 1rem; flex-wrap: wrap; overflow-wrap: anywhere; width: 100%; text-align: left; background: none; border: none; padding: 0.5rem 0.75rem; cursor: pointer; display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--ink); font: inherit; }
+.pr-log-rows { padding: 0 0.75rem 0.5rem; font-size: 0.85rem; }
+.pr-log-row { padding: 0.35rem 0; border-top: 1px solid var(--edge); }
+
+/* Ledger */
+.pr-ledger-total { font-family: var(--font-display); font-size: 1.75rem; font-weight: 600; }
+
+@media (max-width: 700px) {
+    .pr-band { padding: 1.25rem; }
+    .pr-section { padding: 1.25rem 1rem; }
+    .pr-sticky { position: static; padding: 0.75rem 1rem; }
+    .pr-anchors { gap: 0; }
+    .pr-anchors a { padding-inline: 0.6rem; }
+    .pr-filters { gap: 0.75rem; }
+    .pr-stats { gap: 1rem; }
+    .pr-pill { min-height: 2rem; }
+}
+
+/* Print */
+@media print {
+    .pr-sticky { display: none; }
+    .pr-table tr, .pr-detail, .pr-rail-card { break-inside: avoid; }
+    .pr-schedule-scroll, .pr-table-scroll { overflow: visible; border: 0; }
+    .pr-table { min-width: 0; }
+    .pr-table th, .pr-table td { line-height: 1.55; padding: 0.4rem; font-size: 0.75rem; }
+    .pr-col-id { width: 6rem; }
+    .pr-col-owner { width: 7rem; }
+    .pr-col-lane, .pr-col-due, .pr-col-status { width: 6rem; }
+    .pr-col-priority { width: 5rem; }
+    .pr-rail { flex-wrap: wrap; overflow: visible; }
+    .pr-schedule-scroll svg { max-width: 100%; height: auto; }
+    /* On paper the card edge is the page edge, and the masthead's glow is ink
+       nobody asked to spend. The palette block below supplies the light values
+       for both themes, so print needs no colours of its own. */
+    .pr-root { border: 0; border-radius: 0; }
+    .pr-band { background: var(--panel); padding: 16px 24px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pr-caret, .pr-switch-knob { transition: none; }
+}
+/* PRESS palette */
+:root .pr-root,:root[data-theme="light"] .pr-root{color-scheme:light;--bg:#f2f2f2;--raised:#f2f2f2;--ink:#25282b;--muted:#4a4d4e;--line:#bebebe;--accent:#e60000;--link:#e60000;--brand:#e60000;--ok:#226547;--warn:#795100;--sans:"Vodafone", -apple-system, "SF Pro Display", "Helvetica Neue", "Segoe UI", Arial, sans-serif;--font-sans:"Vodafone", -apple-system, "SF Pro Display", "Helvetica Neue", "Segoe UI", Arial, sans-serif;--font-display:"Vodafone", -apple-system, "SF Pro Display", "Helvetica Neue", "Segoe UI", Arial, sans-serif;--font-mono:ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;--panel:#ffffff;--edge:#bebebe;--crit:#ad2838;--focus:#00798c;--action-ink:#ffffff;}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .pr-root{color-scheme:dark;--bg:#04050a;--raised:#0b0d12;--ink:#f2f4f8;--muted:#c3cad6;--line:#353b47;--accent:#ff6b6b;--link:#ff6b6b;--brand:#e60000;--ok:#4ade9b;--warn:#ffb547;--sans:"Vodafone", -apple-system, "SF Pro Display", "Helvetica Neue", "Segoe UI", Arial, sans-serif;--font-sans:"Vodafone", -apple-system, "SF Pro Display", "Helvetica Neue", "Segoe UI", Arial, sans-serif;--font-display:"Vodafone", -apple-system, "SF Pro Display", "Helvetica Neue", "Segoe UI", Arial, sans-serif;--font-mono:ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;--panel:#11141b;--edge:#353b47;--crit:#ff969a;--focus:#4bd5e8;--action-ink:#ffffff;}}
+:root[data-theme="dark"] .pr-root{color-scheme:dark;--bg:#04050a;--raised:#0b0d12;--ink:#f2f4f8;--muted:#c3cad6;--line:#353b47;--accent:#ff6b6b;--link:#ff6b6b;--brand:#e60000;--ok:#4ade9b;--warn:#ffb547;--sans:"Vodafone", -apple-system, "SF Pro Display", "Helvetica Neue", "Segoe UI", Arial, sans-serif;--font-sans:"Vodafone", -apple-system, "SF Pro Display", "Helvetica Neue", "Segoe UI", Arial, sans-serif;--font-display:"Vodafone", -apple-system, "SF Pro Display", "Helvetica Neue", "Segoe UI", Arial, sans-serif;--font-mono:ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;--panel:#11141b;--edge:#353b47;--crit:#ff969a;--focus:#4bd5e8;--action-ink:#ffffff;}
+@media print{:root .pr-root,:root[data-theme="light"] .pr-root,:root[data-theme="dark"] .pr-root,:root:not([data-theme="light"]) .pr-root{color-scheme:light;--bg:#f2f2f2;--raised:#f2f2f2;--ink:#25282b;--muted:#4a4d4e;--line:#bebebe;--accent:#e60000;--link:#e60000;--brand:#e60000;--ok:#226547;--warn:#795100;--sans:"Vodafone", -apple-system, "SF Pro Display", "Helvetica Neue", "Segoe UI", Arial, sans-serif;--font-sans:"Vodafone", -apple-system, "SF Pro Display", "Helvetica Neue", "Segoe UI", Arial, sans-serif;--font-display:"Vodafone", -apple-system, "SF Pro Display", "Helvetica Neue", "Segoe UI", Arial, sans-serif;--font-mono:ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;--panel:#ffffff;--edge:#bebebe;--crit:#ad2838;--focus:#00798c;--action-ink:#ffffff;}}
+/* /PRESS palette */

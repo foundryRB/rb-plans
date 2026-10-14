@@ -1,0 +1,15 @@
+{{- if .Values.host }}
+# The MCP transport's allowed Host (REF-MCP.md section 4): unset locally
+# (the SDK admits localhost by default) and rendered here only once the
+# install sets a real hostname - the same guard httproute.yaml already
+# puts on .Values.host, because an ungated key would render set-and-empty,
+# a third state the transport is not told to handle. Consumed by the app
+# container as MCP_ALLOWED_HOST, optional: true, because the key can
+# therefore be absent while this ConfigMap exists at all.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}
+data:
+  MCP_ALLOWED_HOST: {{ .Values.host | quote }}
+{{- end }}

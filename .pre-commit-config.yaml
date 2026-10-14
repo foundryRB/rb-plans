@@ -1,0 +1,26 @@
+# The platform's commit convention, checked at commit time so a violation
+# fails the commit instead of the push. The convention is documented on the
+# platform portal's GitOps delivery page, under "Commit convention"; CI's
+# commit-hygiene job is the check that holds, and this config is a conformance
+# claim (INT-FOUNDRY-019). pygrep is pre-commit's own built-in matcher, so the
+# trailer check needs no toolchain the committer may not have.
+#
+# Install once per clone: pre-commit install. Both hooks run at commit-msg, and
+# `pre-commit install` wires the pre-commit stage ONLY - so without the line
+# below it writes .git/hooks/pre-commit, git never calls either hook, and both
+# guards sit inert while the config looks complete.
+default_install_hook_types: [commit-msg]
+repos:
+    - repo: https://github.com/compilerla/conventional-pre-commit
+      rev: v3.4.0
+      hooks:
+          - id: conventional-pre-commit
+            stages: [commit-msg]
+    - repo: local
+      hooks:
+          - id: no-co-authored-by
+            name: no Co-authored-by trailer
+            entry: '^[ \t\v\f]*Co-authored-by:'
+            language: pygrep
+            args: [--ignore-case]
+            stages: [commit-msg]

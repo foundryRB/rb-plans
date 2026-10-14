@@ -1,0 +1,196 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+spec:
+  # The platform pauses an app by overriding .Values.paused on its ArgoCD
+  # Application (ADR-030); docs stay served, this workload scales to zero.
+  replicas: {{ if .Values.paused }}0{{ else }}1{{ end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Chart.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Chart.Name }}
+      {{- if .Values.host }}
+      annotations:
+        # Arms the ConfigMap's change: without this on the POD TEMPLATE a
+        # config-only edit (a host change) syncs as a silent no-op.
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+      {{- end }}
+    spec:
+      imagePullSecrets:
+        {{- toYaml .Values.imagePullSecrets | nindent 8 }}
+      {{- if .Values.events.enabled }}
+      initContainers:
+        # A NATS client reads one credentials file; the grant delivers its two
+        # halves as two Secrets, because reflecting them together would have
+        # carried the private seed out of this namespace. Assembling them here
+        # keeps that boundary and costs one short init step. Uses the app's own
+        # image so the pod pulls nothing extra.
+        - name: assemble-nats-creds
+          image: "{{ .Values.images.app.repository }}:{{ .Values.images.app.tag }}"
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -eu
+              # Built line by line rather than with one printf: a credentials file is
+              # framed text, and $(cat ...) normalises whatever trailing newline each
+              # Secret happens to carry.
+              {
+                echo '-----BEGIN NATS USER JWT-----'
+                echo "$(cat /jwt/user.jwt)"
+                echo '------END NATS USER JWT------'
+                echo
+                echo '-----BEGIN USER NKEY SEED-----'
+                echo "$(cat /seed/seed)"
+                echo '------END USER NKEY SEED------'
+              } > /out/app.creds
+              chmod 400 /out/app.creds
+              echo "assembled the bus credentials"
+          volumeMounts:
+            - { name: nats-seed, mountPath: /seed, readOnly: true }
+            - { name: nats-jwt, mountPath: /jwt, readOnly: true }
+            - { name: nats-creds, mountPath: /out }
+      {{- end }}
+      containers:
+        - name: app
+          image: "{{ .Values.images.app.repository }}:{{ .Values.images.app.tag }}"
+          ports:
+            - containerPort: {{ .Values.port }}
+          env:
+            - name: PORT
+              value: {{ .Values.port | quote }}
+            # The fleet's spelling of "this app's key gates the machine door
+            # and nothing else" (REF-Foundry.md section 3's mcp-split rule,
+            # INT-FOUNDRY-037), beside the sidecar below that fronts every
+            # other route (ADR-008). The literal double-quoted value is a
+            # conformance-check assertion on the template TEXT, not merely
+            # the rendered output - do not templatize the value itself.
+            - name: PLANS_AUTH_SCOPE
+              value: "mcp"
+            {{- if .Values.database.enabled }}
+            # Non-secret coordinates are app config (REF-Foundry.md section
+            # 3); only the password is platform-minted. The owner role has
+            # no default - an empty value is a startup-refusal the app
+            # itself enforces (INT-PLANS-044).
+            - name: DATABASE_HOST
+              value: {{ .Values.database.host | quote }}
+            - name: DATABASE_PORT
+              value: {{ .Values.database.port | quote }}
+            - name: DATABASE_NAME
+              value: {{ .Values.database.name | quote }}
+            - name: DATABASE_USER
+              value: {{ .Values.database.user | quote }}
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ required "set database.existingSecret" .Values.database.existingSecret }}
+                  key: password
+            {{- end }}
+            {{- if .Values.events.enabled }}
+            - name: NATS_URL
+              value: {{ .Values.events.servers | quote }}
+            - name: NATS_CREDS
+              value: /var/run/nats/app.creds
+            {{- end }}
+            {{- if .Values.host }}
+            # Optional: true because the key can be absent while the
+            # ConfigMap exists at all (the value itself is set-and-empty
+            # only when the install has not named a host, which never
+            # happens once this block renders).
+            - name: MCP_ALLOWED_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Chart.Name }}
+                  key: MCP_ALLOWED_HOST
+                  optional: true
+            {{- end }}
+            # The machine door's own key, minted by this chart ahead of the
+            # Deployment (templates/mcp-key.yaml, ADR-005): required, so the
+            # pod never starts without it.
+            - name: MCP_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Chart.Name }}-mcp
+                  key: MCP_USER
+            - name: MCP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Chart.Name }}-mcp
+                  key: MCP_PASSWORD
+          {{- if .Values.events.enabled }}
+          volumeMounts:
+            - name: nats-creds
+              mountPath: /var/run/nats
+              readOnly: true
+          {{- end }}
+        # The proxy sidecar (ADR-005, REF-Foundry.md section 5: the grant
+        # renders the realm, this chart renders the gate). --provider=oidc
+        # (never keycloak-oidc: it audience-checks the access token, whose
+        # default aud is "account" rather than the client, and every
+        # callback would 500 - INT-FOUNDRY-057). The singular --api-route
+        # (never --api-routes, an unknown flag that crash-loops the proxy)
+        # makes an unauthenticated REST call answer 401 rather than
+        # redirect to a login page a machine can't follow.
+        - name: oauth2-proxy
+          image: "{{ .Values.auth.proxyImage }}"
+          args:
+            - --http-address=0.0.0.0:4180
+            - --upstream=http://127.0.0.1:{{ .Values.port }}
+            - --provider=oidc
+            - --oidc-issuer-url={{ .Values.auth.oidc.issuer }}
+            - --client-id={{ .Values.auth.oidc.clientId }}
+            - --email-domain=*
+            - --cookie-secure=true
+            - --reverse-proxy=true
+            # With exactly one provider configured, this turns an
+            # unauthenticated browse into an automatic 302 to it instead
+            # of oauth2-proxy's own interstitial "Sign In" page (served
+            # at 403) - found live: the platform's own app_status probe
+            # reads {200, 302/401 behind identity, 401+/api/health-200}
+            # as "serving" and does not recognise a 403 sign-in page as
+            # one, so without this flag a fully-correct, fully-gated
+            # deployment reads as failed-to-probe forever.
+            - --skip-provider-button=true
+            - --skip-auth-route=^/mcp
+            # Without this the proxy strips the credential the machine
+            # door needs even on a route it otherwise skips auth for
+            # (REF-Foundry.md section 3's mcp-split rule).
+            - --skip-auth-strip-headers=false
+            - --api-route=^/api/
+          ports:
+            - name: oidc
+              containerPort: 4180
+          env:
+            # Mapped key by key, never envFrom (whose variable names would
+            # be the Secret's keys rather than the ones the proxy reads).
+            - name: OAUTH2_PROXY_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ required "set auth.oidc.existingSecret" .Values.auth.oidc.existingSecret }}
+                  key: clientSecret
+            - name: OAUTH2_PROXY_COOKIE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.auth.oidc.existingSecret }}
+                  key: cookieSecret
+      {{- if .Values.events.enabled }}
+      # Neither Secret is optional: a missing grant holds the pod at
+      # CreateContainerConfigError, where the absent Secret is named, rather
+      # than starting it with an empty credentials file that drops every
+      # publish silently (the one-way rule makes that failure mute by design).
+      volumes:
+        - name: nats-seed
+          secret:
+            secretName: {{ required "set events.seedSecret" .Values.events.seedSecret }}
+        - name: nats-jwt
+          secret:
+            secretName: {{ required "set events.jwtSecret" .Values.events.jwtSecret }}
+        - name: nats-creds
+          emptyDir: {}
+      {{- end }}

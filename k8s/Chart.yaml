@@ -1,0 +1,5 @@
+apiVersion: v2
+name: vf-plans
+description: "Create and manage REF-Plan project plans - one write path, immutable versions, standalone HTML export"
+type: application
+version: 0.1.0

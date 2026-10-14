@@ -1,0 +1,33 @@
+# The app's promotion contract: where proven releases move beyond the entry
+# environment. Each target carries its door (how the write is submitted),
+# terms (what is written, and what deployed means) and acceptance (what
+# proven-there means), written out in full; nothing is resolved by an engine
+# at run time. Credentials are named here and held by the platform, never
+# stored in any repository.
+#
+# targets:
+#   - name: example-prod          # an environment of an install we run
+#     kind: environment
+#     install: example
+#     environment: prod           # in that install's declared list; never its entry
+#     door: commit                # to this repo's deploy-example branch
+#     terms: version              # image tags + chart pin; deployed when it serves them
+#     acceptance: probe           # or: none (closes at deployed), or suite
+#   - name: example-qa            # a suite verdict is READ where it is published
+#     kind: environment
+#     install: example
+#     environment: qa
+#     door: commit
+#     terms: version
+#     acceptance: suite           # the app's own integrated suite
+#     suite: https://ci.example/api/sit/latest
+#     suite_pass: '"result":"passed"'   # a 200 is transport, not a pass
+#   - name: partner               # another organization's repository
+#     kind: repository
+#     repo: their-org/their-repo
+#     branch: main
+#     credential: partner-pair    # a named secret the platform holds
+#     door: pull-request          # theirs to review; the merge lands it
+#     terms: source
+#     acceptance: none            # or: probe: https://their-hostname.example
+targets: []

@@ -1,0 +1,7 @@
+# The vendored renderer is pinned by SHA-256 (renderer/PINNED.json), so its bytes have to
+# survive a checkout unchanged. With core.autocrlf on (the Windows default) git would hand
+# the working tree CRLF, every recorded hash would miss, and the pin guard would report
+# drift on a tree that has none - a false alarm worse than a silent one, because its own
+# advice is to re-pin, and doing so records the TRANSLATED bytes and breaks the pin for CI
+# and every other platform instead. No conversion, in either direction.
+renderer/** -text

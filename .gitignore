@@ -1,0 +1,27 @@
+# Python (tests/)
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+
+# Node (docs/, frontend/)
+node_modules/
+dist/
+.astro/
+coverage/
+frontend/public/renderer/
+*.tsbuildinfo
+
+# Playwright (e2e/)
+playwright-report/
+test-results/
+
+# Environment (out-of-band secrets: a committed *.env is never real)
+.env
+k8s/secrets/*.env
+
+# The delivery scratch's worktree mount point (committed on the line's delivery/* ref, never here).
+.delivery/
+.mcp.json

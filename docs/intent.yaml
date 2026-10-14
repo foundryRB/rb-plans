@@ -1,0 +1,99 @@
+# Docs page contracts, enforced by tests/starlight.test.ts.
+INT-STARLIGHT-001:
+    version: 1.0.0
+    status: active
+    statement: "Every doc page MUST have a non-empty `title` frontmatter field."
+    rationale: "Starlight uses title for nav, page heading, and OG metadata; missing
+        title yields broken UI."
+    test:
+        scope: unit
+        component: ContentCollection
+        type: invariant
+    criticality: critical
+
+
+# --- bundle: STARLIGHT v0.4.0 (applied 2026-10-04T11:26:14+00:00) ---
+INT-STARLIGHT-002:
+  statement: Every doc page MUST have a non-empty `id` frontmatter field.
+  rationale: Stable per-doc identifier for cross-linking and navigation; required by the content collection schema.
+  criticality: critical
+  version: 1.0.0
+  status: active
+  test: {'scope': 'unit', 'component': 'ContentCollection', 'type': 'invariant'}
+INT-STARLIGHT-003:
+  statement: Doc page `id` values MUST be unique across the entire docs collection.
+  rationale: Duplicate IDs break cross-link resolution and content-collection queries.
+  criticality: critical
+  version: 1.0.0
+  status: active
+  test: {'scope': 'integration', 'component': 'ContentCollection', 'type': 'invariant'}
+INT-STARLIGHT-004:
+  statement: Every doc page MUST have a `type` frontmatter field with value in {Overview, Guide, Standard, Reference, Template, Intent, Flow, Module}.
+  rationale: Type drives nav grouping and template selection; unknown values produce orphan pages. Template and Intent match REF-Documentation 7.3; Flow covers sequence-diagram pages; Module covers one bounded context's page in the application documentation set (REF-Documentation 7.11).
+  criticality: high
+  version: 1.2.0
+  status: active
+  test: {'scope': 'unit', 'component': 'ContentCollection', 'type': 'contract'}
+INT-STARLIGHT-005:
+  statement: Every doc page MUST have a `status` frontmatter field with value in {Draft, Active, Deprecated}.
+  rationale: Status drives visibility filters and review queues.
+  criticality: high
+  version: 1.0.0
+  status: active
+  test: {'scope': 'unit', 'component': 'ContentCollection', 'type': 'contract'}
+INT-STARLIGHT-006:
+  statement: Every doc page MUST have an `updated` frontmatter field formatted as YYYY-MM-DD.
+  rationale: Drives staleness detection and 'last updated' display in the rendered site.
+  criticality: high
+  version: 1.0.0
+  status: active
+  test: {'scope': 'unit', 'component': 'ContentCollection', 'type': 'contract'}
+INT-STARLIGHT-007:
+  statement: Every doc page MUST open with non-empty introductory prose before its first level-2 heading. A single leading navigation line or bold-only line before the prose is allowed; what matters is that some non-empty, non-heading prose exists before the first level-2 heading.
+  rationale: "A page that jumps straight into sections gives the reader no orientation; a short intro states what the page is and how its parts fit before the first `## ` heading."
+  criticality: high
+  version: 1.0.0
+  status: active
+  test: {'scope': 'unit', 'component': 'PageStructure', 'type': 'invariant'}
+INT-STARLIGHT-008:
+  statement: Every doc page MUST contain at least one level-2 heading.
+  rationale: Level-2 headings are the page's sections; a page with none is an undifferentiated wall of text with no nav anchors or scannable structure.
+  criticality: medium
+  version: 1.0.0
+  status: active
+  test: {'scope': 'unit', 'component': 'PageStructure', 'type': 'invariant'}
+INT-STARLIGHT-009:
+  statement: "A page with `type: Flow` MUST contain a Mermaid `sequenceDiagram` and a steps section (a level-2 heading named Steps OR an ordered list)."
+  rationale: A Flow tells a dynamic story; the sequence diagram is the picture and the steps are the narration. One without the other is half a flow.
+  criticality: high
+  version: 1.0.0
+  status: active
+  test: {'scope': 'unit', 'component': 'PageStructure', 'type': 'contract'}
+INT-STARLIGHT-010:
+  statement: "A page with `type: Guide` MUST contain a numbered procedure: an ordered list OR at least two headings that begin with a number (for example `## 1. ...`)."
+  rationale: A Guide is a how-to; the reader needs ordered steps to follow, expressed either as an ordered list or as numbered section headings.
+  criticality: medium
+  version: 1.0.0
+  status: active
+  test: {'scope': 'unit', 'component': 'PageStructure', 'type': 'contract'}
+INT-STARLIGHT-011:
+  statement: "Internal markdown link targets MUST be relative to the current page: no link or image target in doc prose may be root-absolute (start with `/`). Code blocks are exempt (link syntax there is just text)."
+  rationale: Astro's `base` prefixes generated navigation and asset URLs but never rewrites hand-written hrefs, so a root-absolute internal link escapes the site's base path and 404s the moment the site serves under a portal prefix (DOCS_BASE) - a live docs site linked /lifecycle/ instead of ../lifecycle/ and broke exactly this way.
+  criticality: high
+  version: 1.0.0
+  status: active
+  test: {'scope': 'unit', 'component': 'ContentCollection', 'type': 'invariant'}
+INT-STARLIGHT-012:
+  statement: "A page with `type: Module` MUST carry the three viewpoints Business, Functional and Technical, each as a level-2 heading or as a tab label, AND a Mermaid `classDiagram` or `erDiagram` drawing its domain model."
+  rationale: A module page describes one bounded context for three readers at once (REF-Documentation 7.4, 7.11), and its domain model is structure, which is drawn before it is described (7.1). A module page missing a viewpoint serves one reader and drops two; one missing the diagram leaves the reader to assemble the model from prose.
+  criticality: high
+  version: 1.0.0
+  status: active
+  test: {'scope': 'unit', 'component': 'PageStructure', 'type': 'contract'}
+INT-STARLIGHT-013:
+  statement: Outside the decisions collection (`decisions/`), a page's prose MUST NOT name an ADR identifier (`ADR-NNN`, any case, three or four digits) or link an individual decision page (a target containing `decisions/adr-` in a markdown link, a reference-style link definition or an `href` attribute); a link to the collection itself is allowed anywhere. Fenced code (backtick or tilde fences of any length), inline code and MDX comments are exempt.
+  rationale: "The why lives only in the decision log (REF-Documentation 7.9): docs prose states what is, and reaches rationale through the decisions index, never by inline citation. Each inline ADR reference turns a target page into a change history, one link at a time."
+  criticality: high
+  version: 1.0.0
+  status: active
+  test: {'scope': 'unit', 'component': 'PageStructure', 'type': 'invariant'}

@@ -1,0 +1,19 @@
+{
+    "name": "vf-plans-docs",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "astro dev",
+        "build": "astro build",
+        "test": "vitest run"
+    },
+    "dependencies": {
+        "@astrojs/starlight": "~0.41.0",
+        "@psa-department-of-engineering/starlight-theme": "^1.2.0",
+        "astro": "~7.2.8"
+    },
+    "devDependencies": {
+        "@psa-department-of-engineering/vitest-intent": "^2.0.1",
+        "vitest": "^4.1.11"
+    }
+}

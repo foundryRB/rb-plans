@@ -1,0 +1,37 @@
+# The repo's single source of truth for the images CI releases: every
+# service with a build: section publishes, named by its image: basename
+# (INT-FOUNDRY-061; the docs image publishes beside them from docs/Dockerfile).
+# `db` carries no build: key, so it publishes nothing; it exists for local
+# runs and the integration suites only, and CI's own Postgres is a services:
+# container (test.yml).
+services:
+    app:
+        build:
+            context: ..
+            dockerfile: devops/Dockerfile
+        image: vf-plans-app:latest
+        ports:
+            # The app listens on 8000 (backend/run.py's default, the same
+            # port k8s/values.yaml pins as .Values.port), published on 8080.
+            - "8080:8000"
+        environment:
+            DATABASE_URL: postgresql://vf_plans:vf_plans@db:5432/vf_plans
+            MCP_USER: dev
+            MCP_PASSWORD: dev
+        depends_on:
+            db:
+                condition: service_healthy
+
+    db:
+        image: postgres:16-alpine
+        environment:
+            POSTGRES_USER: vf_plans
+            POSTGRES_PASSWORD: vf_plans
+            POSTGRES_DB: vf_plans
+        ports:
+            - "55432:5432"
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U vf_plans"]
+            interval: 2s
+            timeout: 3s
+            retries: 15

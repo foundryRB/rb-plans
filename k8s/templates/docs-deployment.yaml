@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}-docs
+  labels:
+    app.kubernetes.io/component: docs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      # Inline on purpose: the homepage tile derives its pod selector from the
+      # vf-plans-docs route name (INT-FOUNDRY-048); the shared name helper would
+      # yield the bare chart name and the tile would render NOT FOUND.
+      app.kubernetes.io/name: {{ .Chart.Name }}-docs
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Chart.Name }}-docs
+        app.kubernetes.io/component: docs
+    spec:
+      imagePullSecrets:
+        {{- toYaml .Values.imagePullSecrets | nindent 8 }}
+      containers:
+        - name: docs
+          image: "{{ .Values.images.docs.repository }}:{{ .Values.images.docs.tag }}"
+          ports:
+            - containerPort: 80

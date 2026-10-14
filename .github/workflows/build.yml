@@ -1,0 +1,22 @@
+# vf-plans CI: a thin caller of the platform's reusable build workflow.
+# The build logic lives once in VFPT-VODAFONE-FOUNDRY/adf-ci; this only points
+# at it, so it cannot drift (INT-FOUNDRY-013). Defaults apply: image names from the
+# compose services, docs base = /apps/vf-plans.
+name: build
+
+on:
+    push:
+        branches: [main]
+    # A fork's PR runs here too: the shared workflow's release job is guarded on
+    # github.event_name, so a PR gets the conformance gate and publishes nothing.
+    pull_request:
+
+jobs:
+    build:
+        uses: VFPT-VODAFONE-FOUNDRY/adf-ci/.github/workflows/build.yml@main
+        with:
+            app-name: vf-plans
+        permissions:
+            contents: write
+            packages: write
+        secrets: inherit

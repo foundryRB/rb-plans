@@ -1,0 +1,61 @@
+# Chart defaults. The deploy-<install> branch nests these under `vf-plans:` (the
+# chart ships as a dependency) and pins the served tags; Image Updater
+# advances them there (ADR-022). `host` is per install: the hostname lands
+# in the deploy branch's values (install-agnostic chart, INT-FOUNDRY-046).
+paused: false
+host: ""
+# The app container's port: deployment.yaml's containerPort and PORT, the
+# oauth2-proxy sidecar's --upstream, and service.yaml's target on the
+# ungated path.
+port: 8000
+gateway:
+    name: vf-plans
+    namespace: network
+imagePullSecrets:
+    - name: ghcr-pull
+images:
+    app:
+        repository: ghcr.io/vfpt-vodafone-foundry/vf-plans-app
+        tag: latest
+    docs:
+        repository: ghcr.io/vfpt-vodafone-foundry/vf-plans-docs
+        tag: latest
+
+# Capability wiring. The identity grant is required: the sidecar always runs.
+# Flip `enabled` on the others once the matching grant exists. The Secret and
+# key names below are the ones the grant's Jobs create.
+auth:
+    oidc:
+        # foundry-onboard-keycloak. The sidecar reads clientSecret/cookieSecret
+        # out of this Secret; map them key by key onto OAUTH2_PROXY_CLIENT_SECRET
+        # and OAUTH2_PROXY_COOKIE_SECRET, never with envFrom, whose variable
+        # names would be the Secret's keys rather than the ones the proxy reads.
+        existingSecret: keycloak-vf-plans
+        clientId: vf-plans
+        issuer: ""
+    proxyImage: quay.io/oauth2-proxy/oauth2-proxy:v7.7.1
+database:
+    # foundry-onboard-database. `host` is the shared cluster's read-write
+    # service; the per-app role password is under key `password`. `user`
+    # (the owner role) has no source here - it is the grant's, declared in
+    # the install's teams folder, and set on the deploy branch at
+    # onboarding; the app refuses to start on an unset value
+    # rather than falling back to an implicit identity (INT-PLANS-044).
+    enabled: true
+    host: shared-rw.databases.svc.cluster.local
+    port: 5432
+    name: vf-plans
+    user: ""
+    existingSecret: pg-app-vf-plans
+events:
+    # foundry-onboard-events. Two Secrets, because the grant keeps the private
+    # half home: `nats-vf-plans` (key `seed`) is the keypair this app's own
+    # generator minted in this namespace, never reflected anywhere;
+    # `nats-jwt-vf-plans` (key `user.jwt`) is the user JWT the platform signed for
+    # its public half and reflected back. The deployment assembles the two
+    # into the one credentials file a NATS client reads. `servers` is the
+    # bus's in-cluster address; it has no public one.
+    enabled: false
+    servers: nats://nats.messaging.svc.cluster.local:4222
+    seedSecret: nats-vf-plans
+    jwtSecret: nats-jwt-vf-plans

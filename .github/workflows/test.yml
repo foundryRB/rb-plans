@@ -1,0 +1,149 @@
+# vf-plans app-owned test suites. Deliberately NOT a thin caller: build.yml is shared
+# because release and publish must not drift, but a test suite is genuinely per-app
+# (a pytest, a vitest, a Playwright e2e), so there is nothing to share. What IS
+# contract is that this file exists and runs on pull_request, so a contributor's PR
+# - including one from a fork - meets a gate before it is merged (INT-FOUNDRY-063).
+#
+# Five suites: the intent audit, pytest (tests/, PostgreSQL service), vitest
+# (frontend/, its own MVVM-boundary check), playwright (e2e/, the 15
+# self-contained e2e claims, PostgreSQL service, Chromium, Firefox and WebKit),
+# and the docs site's own vitest meta-test. tests/deployed/ is excluded here by
+# name (--ignore), never by a marker deselect that would still import it at
+# collection: it runs only from the in-cluster verification Job.
+name: test
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+
+jobs:
+    intent:
+        # A fork has no access to this org's ARC scale set, so its jobs would queue
+        # forever; a fork falls back to a GitHub-hosted runner while our runs stay on
+        # ARC (foundry-platform ADR-037 governs our runs, not a fork's).
+        runs-on: ${{ github.event.repository.fork && 'ubuntu-latest' || 'arc-dind' }}
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-python@v5
+              with:
+                  python-version: "3.13"
+            # csd-intent audits intent.yaml against CSD-INTENT-01 and checks every
+            # active claim is attested by a test marker naming it.
+            - name: Install the intent auditor
+              run: pip install "csd-intent~=0.4.0"
+            - name: Audit intent.yaml
+              run: csd-intent .
+
+    pytest:
+        # The store-backed suites (21 integration claims) need a real
+        # PostgreSQL (a store-less test fails, it never skips) and
+        # tests/test_renderer_bundle.py needs node to re-run the frontend's
+        # own projection script.
+        runs-on: ${{ github.event.repository.fork && 'ubuntu-latest' || 'arc-dind' }}
+        services:
+            postgres:
+                image: postgres:16
+                env:
+                    POSTGRES_USER: vf_plans
+                    POSTGRES_PASSWORD: vf_plans
+                    POSTGRES_DB: vf_plans
+                ports:
+                    - 5432:5432
+                options: >-
+                    --health-cmd pg_isready
+                    --health-interval 5s
+                    --health-timeout 5s
+                    --health-retries 10
+        env:
+            DATABASE_URL: postgresql://vf_plans:vf_plans@localhost:5432/vf_plans
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-python@v5
+              with:
+                  python-version: "3.13"
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: "22"
+            - name: Install the app and its test runtime
+              run: pip install -e ".[test]"
+            - name: Run the suite (tests/deployed/ excluded - it runs only in-cluster)
+              run: pytest tests --ignore=tests/deployed
+
+    vitest:
+        # frontend/'s own suite, including the MVVM-boundary import-direction
+        # check (INT-PLANS-029).
+        runs-on: ${{ github.event.repository.fork && 'ubuntu-latest' || 'arc-dind' }}
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: "22"
+            - run: npm ci --no-audit --no-fund
+              working-directory: frontend
+            - run: npm test
+              working-directory: frontend
+
+    playwright:
+        # The 15 self-contained e2e claims, against the app's own stack -
+        # both webServer entries in e2e/playwright.config.ts start cold here.
+        runs-on: ${{ github.event.repository.fork && 'ubuntu-latest' || 'arc-dind' }}
+        services:
+            postgres:
+                image: postgres:16
+                env:
+                    POSTGRES_USER: vf_plans
+                    POSTGRES_PASSWORD: vf_plans
+                    POSTGRES_DB: vf_plans
+                ports:
+                    - 5432:5432
+                options: >-
+                    --health-cmd pg_isready
+                    --health-interval 5s
+                    --health-timeout 5s
+                    --health-retries 10
+        env:
+            DATABASE_URL: postgresql://vf_plans:vf_plans@localhost:5432/vf_plans
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-python@v5
+              with:
+                  python-version: "3.13"
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: "22"
+            - name: Install the backend
+              run: pip install -e .
+            - name: Install the frontend
+              run: npm ci --no-audit --no-fund
+              working-directory: frontend
+            - name: Install the e2e suite
+              run: npm ci --no-audit --no-fund
+              working-directory: e2e
+            - name: Install Playwright browsers (chromium, firefox, webkit)
+              run: npx playwright install --with-deps chromium firefox webkit
+              working-directory: e2e
+            - name: Run the suite
+              run: npx playwright test
+              working-directory: e2e
+            - name: Upload the report on failure
+              if: failure()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: playwright-report
+                  path: e2e/playwright-report/
+                  retention-days: 7
+
+    docs:
+        # The docs site canonical STARLIGHT conformance suite.
+        # Dependencies use the committed lockfile.
+        runs-on: ${{ github.event.repository.fork && 'ubuntu-latest' || 'arc-dind' }}
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: "22"
+            - run: npm ci --no-audit --no-fund
+              working-directory: docs
+            - run: npm test
+              working-directory: docs

@@ -1,0 +1,12 @@
+{
+  "_comment": "The single home for the vendored renderer pin. update-vendored-renderer.sh writes this file; check_pin_drift.py and tests/test_vendor_pin.py read it. Never hand-edit either this or the vendored files - a hand-edit is a re-implementation wearing a pin's clothes, and the fork ADR-001 exists to prevent.",
+  "repo": "VFPT-VODAFONE-FOUNDRY/adf-playbook",
+  "source": "galaxies/press/skills/bootstrap-plan/renderer",
+  "ref": "d5a3eb1733558ca9f63dcfe003d79b4720d1beaa",
+  "pinned_on": "2026-10-10",
+  "files": {
+    "plan-renderer.js": "760cc939fc134aa9c997caa279cf0fbed89ebfc0e16effe1a22d3fb7e296a6fb",
+    "plan-renderer.css": "9df6b06530f5a57ac417facfa37f78b395f27c72acfdfef576f032bf57d80b9c",
+    "plan-page.html": "1820ead54041ae35ce15311a74ab0c12554bda4e9a0212985be356a3f8df15cc"
+  }
+}

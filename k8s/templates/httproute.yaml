@@ -1,0 +1,19 @@
+{{- if .Values.host }}
+# external-dns registers DNS from this route's hostname; the parent is the
+# app's OWN Gateway in the network namespace, never an invented or platform
+# one (INT-FOUNDRY-046). host is set per install on the deploy branch.
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: {{ .Chart.Name }}
+spec:
+  parentRefs:
+    - name: {{ .Chart.Name }}
+      namespace: {{ .Values.gateway.namespace }}
+  hostnames:
+    - {{ .Values.host }}
+  rules:
+    - backendRefs:
+        - name: {{ .Chart.Name }}
+          port: 80
+{{- end }}

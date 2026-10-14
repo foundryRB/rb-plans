@@ -1,0 +1,83 @@
+# The machine door's key (ADR-005), minted in this namespace with the
+# platform's generate-if-absent idiom for an app runtime secret (platform
+# ADR-034, Class 3a): created once, never rotated by a re-sync, RBAC scoped to
+# this one Secret name, no reflection. The cockpit's Connect agent panel reads
+# the value back through the app, so nobody needs it before it exists and no
+# hand applies it.
+#
+# Waves -2 and -1 run the mint ahead of the Deployment (wave 0), which reads
+# the Secret by required reference: the pod never starts without its key.
+{{- $secret := printf "%s-mcp" .Chart.Name }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: gen-{{ $secret }}
+  namespace: {{ .Chart.Name }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "-2"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: gen-{{ $secret }}
+  namespace: {{ .Chart.Name }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "-2"
+rules:
+  - apiGroups: [""]
+    resources: [secrets]
+    verbs: [create]
+  - apiGroups: [""]
+    resources: [secrets]
+    resourceNames: [{{ $secret | quote }}]
+    verbs: [get, patch]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: gen-{{ $secret }}
+  namespace: {{ .Chart.Name }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "-2"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: gen-{{ $secret }}
+subjects:
+  - kind: ServiceAccount
+    name: gen-{{ $secret }}
+    namespace: {{ .Chart.Name }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: gen-{{ $secret }}
+  namespace: {{ .Chart.Name }}
+  annotations:
+    # A Sync hook, ordered by wave with the tracked resources: it completes
+    # before the wave-0 Deployment applies.
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/sync-wave: "-1"
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+spec:
+  backoffLimit: 6
+  activeDeadlineSeconds: 300
+  template:
+    spec:
+      serviceAccountName: gen-{{ $secret }}
+      restartPolicy: OnFailure
+      containers:
+        - name: generate
+          image: alpine/k8s:1.31.1
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              set -eu
+              if kubectl get secret {{ $secret }} -n {{ .Chart.Name }} >/dev/null 2>&1; then
+                echo "{{ $secret }} present; leaving value as is"
+              else
+                PASSWORD="$(head -c 24 /dev/urandom | od -An -tx1 | tr -d ' \n')"
+                kubectl create secret generic {{ $secret }} -n {{ .Chart.Name }} \
+                  --from-literal=MCP_USER={{ .Chart.Name }}-agent \
+                  --from-literal=MCP_PASSWORD="$PASSWORD"
+              fi

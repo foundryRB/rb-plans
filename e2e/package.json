@@ -1,0 +1,13 @@
+{
+    "name": "vf-plans-e2e",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "test": "playwright test"
+    },
+    "devDependencies": {
+        "@axe-core/playwright": "^4.10.1",
+        "@playwright/test": "^1.49.0",
+        "@psa-department-of-engineering/playwright-intent": "^2.0.1"
+    }
+}

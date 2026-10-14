@@ -1,0 +1,622 @@
+# vf-plans - the CSD-INTENT-01 claim set for P1, Vodafone Plans (v1).
+#
+# Every claim carries `derived_from` against the 35 P1 requirement IDs, and
+# every requirement maps to a claim here or to the Descoped table on
+# docs/src/content/docs/reference/traceability.md (INT-PLANS-030).
+#
+# RUNTIME. Three suites carry the markers, all of them belonging to THIS
+# project (there is exactly one intent.yaml at the repo root; docs/ is its own
+# separate CSD project and its claims are not these):
+#   scope: unit | integration | contract-shaped  -> pytest + csd-pytest-intent  (tests/)
+#   scope: unit on the frontend                  -> vitest + vitest-intent      (frontend/)
+#   scope: e2e                                   -> playwright + playwright-intent (e2e/)
+# Each suite runs in this repo's CI (.github/workflows/test.yml), which is the
+# run surface every active claim names (REF-CSD.md section 6: "no surface" is a
+# finding). The one exception is INT-PLANS-042, the deployed claim, whose
+# surface is the in-cluster verification Job; its suite lives in
+# tests/deployed/ and CI excludes it.
+#
+# SCOPE VOCABULARY. csd-intent 0.4.0 admits scope in {unit, integration, e2e},
+# test.type in {behavior, contract, invariant}, status in {active, draft,
+# deprecated}. It does NOT admit REF-CSD section 3's `llm` scope, so no claim
+# here is one: a proposition only a reader can decide is attested by the
+# phase's review record instead, never by a marker.
+
+# --- The shell -------------------------------------------------------------
+
+# The walking skeleton's floor claim at 2.0.0: the engine's shell, attested from
+# e2e/tests/shell-and-list.spec.ts.
+INT-PLANS-001:
+    version: 2.0.0
+    status: active
+    statement: "The engine serves the Plan Cockpit application shell at the root path of the running app."
+    rationale: "The one route every other UI claim enters through; the walking skeleton's claim grown into the real shell."
+    derived_from: [POS-002, UI-001]
+    test:
+        scope: e2e
+        component: PlanCockpit
+        type: behavior
+    criticality: high
+
+# --- The contract (REF-Plan.md section 3/4/5) ------------------------------
+
+INT-PLANS-002:
+    version: 1.0.0
+    status: active
+    statement: "A plan read back through any door carries every field of the REF-Plan section 3 dataset it was written with, and no field the engine invented."
+    rationale: "PLN-001 makes the section 3 dataset both the storage model and the API surface; an engine-added field would fork the contract."
+    derived_from: [PLN-001]
+    test:
+        scope: integration
+        component: ApplicationCore
+        type: contract
+    criticality: critical
+
+INT-PLANS-003:
+    version: 1.0.0
+    status: active
+    statement: "The plan view the UI shows is produced by the canonical REF-Plan renderer, not by a second implementation living in the cockpit."
+    rationale: "PLN-002: the engine's plan view IS the renderer bootstrap-plan ships."
+    derived_from: [PLN-002]
+    test:
+        scope: unit
+        component: RendererBundle
+        type: invariant
+    criticality: critical
+
+INT-PLANS-004:
+    version: 1.0.0
+    status: active
+    statement: "The repository holds exactly one canonical renderer source, and the copies the cockpit and the export composer consume are produced from it mechanically at build time."
+    rationale: "PLN-003 forbids two hand-maintained copies; a checked-in projection that drifts from its source is the failure this claim catches."
+    derived_from: [PLN-003]
+    test:
+        scope: unit
+        component: RendererBundle
+        type: invariant
+    criticality: critical
+
+INT-PLANS-005:
+    version: 1.0.0
+    status: active
+    statement: "The docs site carries an ADR recording how the renderer is shared between the bootstrap-plan scaffold and the engine."
+    rationale: "PLN-003 asks for the mechanism AND its ADR; the decision without its record is the half that drifts."
+    derived_from: [PLN-003]
+    test:
+        scope: unit
+        component: DocsSite
+        type: invariant
+    criticality: medium
+
+# --- The UI door -----------------------------------------------------------
+
+INT-PLANS-006:
+    version: 1.0.0
+    status: active
+    statement: "The plans list shows every stored plan, and opening one from the list renders that plan through the REF-Plan render."
+    rationale: "UI-001, the human door's entry surface."
+    derived_from: [UI-001]
+    test:
+        scope: e2e
+        component: PlanCockpit
+        type: behavior
+    criticality: high
+
+INT-PLANS-007:
+    version: 1.0.0
+    status: active
+    statement: "A person with no agent creates a new plan from the UI and lands on that plan's render, stored as its first version."
+    rationale: "UI-005 - the headline verb the request's own UI bullet omitted; without it a human can only edit the plan the importer seeded."
+    derived_from: [UI-005, POS-002]
+    test:
+        scope: e2e
+        component: PlanCockpit
+        type: behavior
+    criticality: critical
+
+INT-PLANS-008:
+    version: 1.0.0
+    status: active
+    statement: "A person with no agent adds and edits dataset items through a form shaped for that item's type, with no agent involved."
+    rationale: "UI-002's first act; forms per item type is the customer's own wording."
+    derived_from: [UI-002]
+    test:
+        scope: e2e
+        component: PlanCockpit
+        type: behavior
+    criticality: critical
+
+INT-PLANS-009:
+    version: 1.0.0
+    status: active
+    statement: "A person with no agent flips an item's status from the UI, and the new status is what the render then shows."
+    rationale: "UI-002's second act."
+    derived_from: [UI-002]
+    test:
+        scope: e2e
+        component: PlanCockpit
+        type: behavior
+    criticality: high
+
+INT-PLANS-010:
+    version: 1.0.0
+    status: active
+    statement: "A decision recorded from the UI is stored with both its author and the time it was recorded, and the render shows both."
+    rationale: "UI-002 asks for a decision with who and when; the authorship is the only personal data the store holds."
+    derived_from: [UI-002]
+    test:
+        scope: e2e
+        component: PlanCockpit
+        type: behavior
+    criticality: high
+
+INT-PLANS-011:
+    version: 1.0.0
+    status: active
+    statement: "A person with no agent appends a row to a plan's log from the UI, and the appended row is present in the stored dataset."
+    rationale: "UI-002's fourth act."
+    derived_from: [UI-002]
+    test:
+        scope: e2e
+        component: PlanCockpit
+        type: behavior
+    criticality: high
+
+INT-PLANS-012:
+    version: 1.0.0
+    status: active
+    statement: "A person with no agent re-anchors a plan's dates from the UI, and every dependent date in the stored dataset moves with the anchor."
+    rationale: "UI-002's fifth act; re-anchoring that leaves dependent dates behind is the silent corruption this claim catches."
+    derived_from: [UI-002]
+    test:
+        scope: e2e
+        component: PlanCockpit
+        type: behavior
+    criticality: high
+
+INT-PLANS-013:
+    version: 1.0.0
+    status: active
+    statement: "Saving in the UI writes a new version rather than overwriting the version that was open."
+    rationale: "UI-003, and the human-facing half of VER-001."
+    derived_from: [UI-003]
+    test:
+        scope: e2e
+        component: PlanCockpit
+        type: behavior
+    criticality: critical
+
+INT-PLANS-014:
+    version: 1.0.0
+    status: active
+    statement: "The version picker lists a plan's versions and presents the decision log entries between two chosen versions as the human-readable diff."
+    rationale: "UI-004; the decision log IS the diff the customer asked for, not a field-level delta."
+    derived_from: [UI-004]
+    test:
+        scope: e2e
+        component: PlanCockpit
+        type: behavior
+    criticality: high
+
+# --- The API door ----------------------------------------------------------
+
+INT-PLANS-015:
+    version: 1.0.0
+    status: active
+    statement: "The REST API exposes the same use cases the UI drives, and a write made through REST is visible on the next read through any other door."
+    rationale: "API-001 over one write path; a REST adapter with its own logic is the divergence this catches."
+    derived_from: [API-001]
+    test:
+        scope: integration
+        component: HttpApi
+        type: contract
+    criticality: critical
+
+INT-PLANS-016:
+    version: 1.0.0
+    status: active
+    statement: "A GET of a plan returns its dataset as REF-Plan JSON, with no envelope, no renaming and no added fields."
+    rationale: "API-002 with PLN-001: the dataset IS the API surface."
+    derived_from: [API-002]
+    test:
+        scope: integration
+        component: HttpApi
+        type: contract
+    criticality: critical
+
+INT-PLANS-017:
+    version: 1.0.0
+    status: active
+    statement: "The export endpoint returns the same bytes the UI displays for that plan version, because both serve the one artifact the export composer produced."
+    rationale: "API-003's byte-identity, held by one mechanism: one output compared against itself, never two renderers kept in step."
+    derived_from: [API-003]
+    test:
+        scope: integration
+        component: ExportComposer
+        type: contract
+    criticality: critical
+
+# --- The MCP door ----------------------------------------------------------
+
+INT-PLANS-018:
+    version: 1.0.0
+    status: active
+    statement: "The MCP door exposes exactly the nine named tools - create_plan, get_plan, upsert_item, record_decision, set_status, append_log, reanchor_dates, new_version, export_plan - and each enters the same use case its UI and REST counterpart does."
+    rationale: "MCP-001 names the nine; a tenth tool or a tool with its own write path forks the engine."
+    derived_from: [MCP-001]
+    test:
+        scope: integration
+        component: McpServer
+        type: contract
+    criticality: critical
+
+# --- Export ----------------------------------------------------------------
+
+INT-PLANS-019:
+    version: 1.0.0
+    status: active
+    statement: "The exported HTML is a single self-contained file that issues no external network request when opened, with its styles, scripts and type faces embedded."
+    rationale: "EXP-001's standalone half, sharpened by embedding the type faces: REF-Plan section 5's font-host default guarantees only a system fallback, and the customer asked for identical."
+    derived_from: [EXP-001]
+    test:
+        scope: integration
+        component: ExportComposer
+        type: invariant
+    criticality: critical
+
+INT-PLANS-020:
+    version: 3.0.0
+    status: active
+    statement: "The exported HTML opened with no network available renders the same plan the UI shows, in the same typography: the identity's font stacks the renderer's sheet carries."
+    rationale: "EXP-001's renders-identically-offline half - the proposition embedding the type faces exists to make literally true."
+    derived_from: [EXP-001]
+    test:
+        scope: e2e
+        component: ExportComposer
+        type: behavior
+    criticality: critical
+
+# --- Versioning (vf-library's principles) ---------------------------------
+
+INT-PLANS-021:
+    version: 1.0.0
+    status: active
+    statement: "Every mutating use case - item upsert, status flip, decision, log append and date re-anchor alike - lands as a new version, and every earlier version stays readable at its own content."
+    rationale: "VER-001. Re-anchoring is named explicitly because it reads like an in-place correction and is not one."
+    derived_from: [VER-001]
+    test:
+        scope: integration
+        component: PlanVersionStore
+        type: contract
+    criticality: critical
+
+INT-PLANS-022:
+    version: 1.0.0
+    status: active
+    statement: "No use case updates or deletes a stored version: the version store is append-only and its rows are immutable once written."
+    rationale: "VER-001's immutability half, which the append-only claim above does not by itself prove."
+    derived_from: [VER-001]
+    test:
+        scope: integration
+        component: PlanVersionStore
+        type: invariant
+    criticality: critical
+
+INT-PLANS-023:
+    version: 1.0.0
+    status: active
+    statement: "Exporting a plan leaves the store byte-identical: no version is written, touched or re-stamped by a read or an export."
+    rationale: "VER-002. An export that stamps a rendered-at timestamp into the store is the mutation this catches."
+    derived_from: [VER-002]
+    test:
+        scope: integration
+        component: ExportComposer
+        type: invariant
+    criticality: high
+
+INT-PLANS-024:
+    version: 1.0.0
+    status: active
+    statement: "Every stored version records whether it is ephemeral or kept, and v1 writes only kept versions because saving in the UI writes a version directly."
+    rationale: "VER-003: the distinction ships in the store from the start so drafts need no migration later, while no v1 path produces an ephemeral version. Stating both halves is what stops this claim contradicting INT-PLANS-013."
+    derived_from: [VER-003]
+    test:
+        scope: integration
+        component: PlanVersionStore
+        type: invariant
+    criticality: medium
+
+INT-PLANS-025:
+    version: 1.0.0
+    status: active
+    statement: "Every read returns state that was persisted rather than held in process, and every door's writes enter through the same application use cases."
+    rationale: "VER-004, and the hexagonal contract that makes the three doors one engine."
+    derived_from: [VER-004]
+    test:
+        scope: integration
+        component: ApplicationCore
+        type: invariant
+    criticality: critical
+
+# --- Import and seed data --------------------------------------------------
+
+INT-PLANS-026:
+    version: 1.0.0
+    status: active
+    statement: "The importer extracts the dataset block from any REF-Plan HTML file and stores it as a plan; a file whose block is missing or does not conform is refused with its reason and nothing is written."
+    rationale: "IMP-001. The refusal half matters as much as the import: a partial import is never stored (design record, Plans - Table)."
+    derived_from: [IMP-001]
+    test:
+        scope: integration
+        component: PlanImporter
+        type: contract
+    criticality: high
+
+INT-PLANS-027:
+    version: 1.0.0
+    status: draft
+    statement: "The ADC plan is present in the running engine as a stored plan and is served through the plan render."
+    rationale: "IMP-002 and DONE-003; the seed is the migration path's first proof."
+    derived_from: [IMP-002, DONE-003]
+    test:
+        scope: integration
+        component: PlanImporter
+        type: behavior
+    criticality: high
+
+# --- House standards -------------------------------------------------------
+
+INT-PLANS-028:
+    version: 1.0.0
+    status: active
+    statement: "The backend is hexagonal: the domain and use-case modules import no web framework, no database driver and no adapter module."
+    rationale: "STD-001. An import-direction check is what makes hexagonal a fact rather than a folder naming convention."
+    derived_from: [STD-001]
+    test:
+        scope: unit
+        component: ApplicationCore
+        type: invariant
+    criticality: high
+
+INT-PLANS-029:
+    version: 1.0.0
+    status: active
+    statement: "The frontend is MVVM: view components hold no data access and no plan-domain logic, reaching the engine only through their view models."
+    rationale: "STD-002, checked the same way STD-001 is - by import direction, not by folder names."
+    derived_from: [STD-002]
+    test:
+        scope: unit
+        component: PlanCockpit
+        type: invariant
+    criticality: high
+
+INT-PLANS-030:
+    version: 1.0.0
+    status: active
+    statement: "Every claim in this file names at least one requirement ID from the committed P1 spine, and every ID on that spine is either named by a claim here or carried in the committed descope table beside it."
+    rationale: "STD-003 asks for intent tests against the proposal requirement ids; this is the traceability itself made checkable, so a silent drop fails a test instead of surviving a reading. Both halves read from the repo - the spine and its descope table are a docs page (the durable home), NOT the delivery scratch, which is a worktree of another ref and does not exist in the CI checkout this claim runs in."
+    derived_from: [STD-003]
+    test:
+        scope: unit
+        component: ApplicationCore
+        type: invariant
+    criticality: high
+
+INT-PLANS-031:
+    version: 1.0.0
+    status: active
+    statement: "The docs site publishes the REF-Plan dataset contract, the three doors, and the architecture decisions, each as a reachable page."
+    rationale: "STD-004; the docs site is priced Full in the frozen P1 component list."
+    derived_from: [STD-004]
+    test:
+        scope: unit
+        component: DocsSite
+        type: invariant
+    criticality: medium
+
+# --- Platform --------------------------------------------------------------
+
+INT-PLANS-032:
+    version: 1.0.0
+    status: active
+    statement: "The app's shipped chart binds the plan store to the platform-granted database and serves the MCP door on its own route, never binding an in-process or file-backed store."
+    rationale: "PLT-001's in-repo half, and only that half. The manifest's `mcp: true` entry lives in the install's teams folder in another repository this repo cannot read, so it is checked on the live install rather than as a claim - as is the grant actually being onboarded. What a repo test CAN decide is that the chart asks for the database at all: a chart that never asks would make the live check fail for a reason nobody could see."
+    derived_from: [PLT-001]
+    test:
+        scope: unit
+        component: AppManifest
+        type: invariant
+    criticality: critical
+
+# --- Boundaries (the customer's stated non-goals, made checkable) ----------
+
+INT-PLANS-033:
+    version: 1.0.0
+    status: active
+    statement: "The engine passes an item's authored critical flag through unchanged to every projection and derives no critical path of its own."
+    rationale: "BND-001. A derived critical path would silently overwrite the author's judgement."
+    derived_from: [BND-001]
+    test:
+        scope: integration
+        component: ApplicationCore
+        type: invariant
+    criticality: high
+
+INT-PLANS-034:
+    version: 1.0.0
+    status: active
+    statement: "No read path aggregates across plans: the plans list carries only each plan's own summary fields, and no door answers a question spanning two plans' items."
+    rationale: "BND-002. The boundary is drawn at aggregation, not at listing - the list's name, updated and next-milestone columns are each one plan's own field."
+    derived_from: [BND-002]
+    test:
+        scope: integration
+        component: HttpApi
+        type: invariant
+    criticality: medium
+
+INT-PLANS-035:
+    version: 1.0.0
+    status: active
+    statement: "The engine authenticates no user of its own: it ships no login route, no session store and no user directory, taking any caller identity it records from the edge proxy's forwarded identity or from the caller's own explicit input."
+    rationale: "BND-003: access control is the platform edge alone. Stated about the ENGINE, because the gate itself is the platform's: the oauth2-proxy sidecar on the human surfaces and one scoped credential on the machine door (INT-PLANS-042, INT-PLANS-043). Written as `authenticates nobody` this claim would contradict both of those and be true only of an app nobody can protect."
+    derived_from: [BND-003]
+    test:
+        scope: integration
+        component: HttpApi
+        type: invariant
+    criticality: high
+
+INT-PLANS-036:
+    version: 1.0.0
+    status: active
+    statement: "The engine hosts no workshop: it ships no workshop entity, endpoint or capture format, and a workshop's capture reaches it only by calling the nine MCP tools."
+    rationale: "BND-004 and MCP-002: workshops are their own artifact kind, reaching the engine through the nine MCP tools."
+    derived_from: [BND-004, MCP-002]
+    test:
+        scope: integration
+        component: McpServer
+        type: invariant
+    criticality: medium
+
+# --- Quality bars (attested as claims, never frozen into a docs page) ------
+
+INT-PLANS-037:
+    version: 1.0.0
+    status: active
+    statement: "Every interactive control on the cockpit's shipped screens is reachable and operable by keyboard alone, with a visible focus indicator."
+    rationale: "The keyboard-reachability bar, which UI-002's no-agent-needed promise and DONE-001's sequence both rest on."
+    derived_from: [UI-002, DONE-001]
+    test:
+        scope: e2e
+        component: PlanCockpit
+        type: invariant
+    criticality: high
+
+INT-PLANS-038:
+    version: 1.0.0
+    status: active
+    statement: "The cockpit's shipped screens and the exported artifact meet WCAG AA contrast for text and for the non-text marks that carry meaning, each measured against the ground it is drawn on."
+    rationale: "The WCAG AA contrast bar. Measured per surface because the identity has two token sets: the chrome's nineteen and REF-Plan section 5's own, which the design record forbids blurring."
+    derived_from: [UI-002, DONE-004]
+    test:
+        scope: e2e
+        component: PlanCockpit
+        type: invariant
+    criticality: high
+
+INT-PLANS-039:
+    version: 3.0.0
+    status: active
+    statement: "Vodafone typography is applied in the cockpit: the Segoe UI sans stack for headings and prose, each with its declared system fallback. The exported artifact takes the identity's stacks from the renderer's sheet (INT-PLANS-020)."
+    rationale: "The cockpit's own chrome wears the approved Vodafone stacks; the plan it renders wears whatever identity the vendored sheet was stamped with, so the engine names no typeface for it."
+    derived_from: [UI-001, EXP-001]
+    test:
+        scope: e2e
+        component: PlanCockpit
+        type: invariant
+    criticality: high
+
+# --- The done bar, walked end to end ---------------------------------------
+
+INT-PLANS-040:
+    version: 1.0.0
+    status: active
+    statement: "A person with no agent opens the UI, edits an item, records a decision, saves a new version, and downloads a standalone HTML that renders identically offline - in one unbroken sequence."
+    rationale: "DONE-001 verbatim. The individual acts each have their own claim; this one attests that they compose, which is what the customer accepts at the delivery gate."
+    derived_from: [DONE-001]
+    test:
+        scope: e2e
+        component: PlanCockpit
+        type: behavior
+    criticality: critical
+
+INT-PLANS-041:
+    version: 1.0.0
+    status: active
+    statement: "An agent completes the same sequence through the MCP door alone - open, edit an item, record a decision, cut a new version, export the standalone HTML - with no UI and no REST call."
+    rationale: "DONE-002 and MCP-002's landing surface: the agent door proven equal to the human one, which is the whole point of one write path. Scoped `integration` rather than `e2e` deliberately - an agent sequence has no browser, and the door IS the end for this actor, so an e2e scope would have bought a driver it never needed and a realm login an agent cannot perform."
+    derived_from: [DONE-002, MCP-002]
+    test:
+        scope: integration
+        component: McpServer
+        type: behavior
+    criticality: critical
+
+# --- Access control at the edge -------------------------------------------
+#
+# Access control IS the platform edge. On this platform an app is reachable at
+# `<app>.<foundry-domain>` with no gate at all unless it is granted a realm and
+# fronted by the oauth2-proxy sidecar (REF-Foundry.md section 3/section 5), so
+# these two claims are what make that true - and REF-Delivery.md
+# section 4a requires the positive sign-in claim, one per shipped shell,
+# wherever an identity realm is in play. Rejecting the unauthenticated is a
+# different proposition and is claim 043's, not claim 042's.
+
+INT-PLANS-042:
+    version: 1.0.0
+    status: active
+    statement: "A person signs in through the app's own identity realm and reaches the Plan Cockpit, attested against the deployed realm rather than a mocked provider."
+    rationale: "REF-CSD.md section 6: a fail-closed claim is not a sign-in claim - 'an unauthenticated request is rejected' attests failing closed, a different proposition from a person getting in. Kept headless with a realm-local test user created in-cluster by the one-shot verification Job the run applies, through the realm-scoped admin the grant mints there, which is what leaves the external broker registration an operator gate OFF the evidence path (same section: a credential a person must type is a human gate on the evidence path). This is the ONE deployed claim in this file: it cannot go active before the realm exists, so it is attested on the live install rather than at the local gate, run from tests/deployed/ by that Job, whose status is the verdict - a status the suite itself makes meaningful, since its pytest_sessionfinish hook forces a non-zero exit unless a test actually ran and passed, so a skipped suite cannot report Complete, so the test user's credential never leaves the cluster (REF-CSD.md section 6). Every other e2e claim here is self-contained against the app's own stack."
+    derived_from: [BND-003, DONE-001]
+    test:
+        scope: e2e
+        component: PlanCockpit
+        type: behavior
+    criticality: critical
+
+INT-PLANS-043:
+    version: 2.0.0
+    status: active
+    statement: "The app gates the machine door itself, on that path alone and on no other, fail-closed on its own key: a call carrying no credential, or one that does not match the key, is refused, and the door answers 503 while no key is configured. Every other route but /api/health is served only under PLANS_AUTH_SCOPE=mcp, the shape the chart runs beside the identity realm's oauth2-proxy sidecar, and answers 503 under any other value."
+    rationale: "REF-Foundry.md section 3's machine-endpoint rule and its mcp-split conformance check: an agent cannot complete a browser login, so a proxy over /mcp would make DONE-002 unreachable, and no gate at all would leave the write path open to anyone. The app doing the refusing is what makes this attestable in an integration test at all, and it does not contradict INT-PLANS-035: the key is the app's one fail-closed credential (REF-MCP.md section 7, REF-Foundry.md section 4), held by the operator who connects an agent, not a user directory - there is still no login route, no session and no user the engine knows about. The proxy's own OIDC client secret is the human audience's credential and is never the door's (one credential per audience, REF-Foundry.md section 3). Deliberately says nothing about the PROXY skipping /mcp, though that is the other half of the mcp-split shape: no integration test against McpServer can see a sidecar that is not in the app's own stack, and a claim asserting it would go active on a test that never checked it. That half is deployed-only and is attested by credentialed and uncredentialed reads through the edge, not as a claim. Its cause list is deliberately open: the skip route and the proxy's header handling are two of the deployed-only ways it breaks, alongside an unmounted key and REF-MCP.md section 4's two transport rules (a 421 until the server learns its public Host, and a bare /mcp swallowed by the catch-all static mount)."
+    derived_from: [MCP-001, BND-003, DONE-002]
+    test:
+        scope: integration
+        component: McpServer
+        type: invariant
+    criticality: critical
+
+# The startup guard: the app refuses to start on an unset owner role, on the
+# one configuration path no CI claim exercises. Unit scope because it is
+# decidable against the config loader with no store at all.
+INT-PLANS-044:
+    version: 1.0.0
+    status: active
+    statement: "When the engine composes its store connection from discrete settings rather than a supplied connection URL, it refuses to start with an owner role unset, failing with an error that names the missing setting rather than connecting under an implicit default identity."
+    rationale: "The platform injects only the database password and declares the owner role install-side, so the role reaches the app as a per-install value that can be empty. Empty must be loud - libpq would otherwise fall back to the container's OS user, which the platform's revoked PUBLIC connect refuses, turning a missing setting into an authentication error nobody can trace back to it. Qualified on the discrete-settings path deliberately: DATABASE_URL takes precedence and CI exports only that, so an unqualified guard would refuse to start in every CI job and redden all 34 store-backed claims at once. Named in the error because the deployed discrete-value path is the one no other claim exercises, so this message is the only thing that will explain it on a live install."
+    derived_from: [PLT-001]
+    test:
+        scope: unit
+        component: PlanVersionStore
+        type: invariant
+    criticality: high
+
+# The connect-an-agent panel (vf-plans#9). The route half is decided against the
+# running app over a real store; the frontend suite attests the panel half against
+# the same statement.
+INT-PLANS-045:
+    version: 1.0.0
+    status: active
+    statement: "The cockpit offers a connect-an-agent panel that fills the MCP connect command with this instance's machine-door key, read from an API route that returns the base64 user:password pair only when both halves are configured, answers 503 while either is unset, and stays behind the gate that fronts the cockpit."
+    rationale: "An agent connects to /mcp with the app's own HTTP Basic key (INT-PLANS-043), so the human connecting one needs that key. The panel hands it to whoever already passed the cockpit's gate, so connecting an agent needs no cluster access and no out-of-band read of the Secret; every MCP app on the install surfaces its key the same way. The route widens no exposure: the app serves it, with every other human surface, only behind the oauth2-proxy sidecar (PLANS_AUTH_SCOPE=mcp) and answers 503 otherwise, so the key reaches only a caller who already passed that gate. The proxy half is deployed-only and outside this claim, as it is for INT-PLANS-043."
+    derived_from: [MCP-001]
+    test:
+        scope: integration
+        component: HttpApi
+        type: invariant
+    criticality: high
+
+# The engine's own text in the export. Decided on the exported bytes: a scan
+# of the file for the character and its escaped spellings reaches the title
+# the composer writes and every string literal of the embedded renderer.
+INT-PLANS-046:
+    version: 1.0.0
+    status: active
+    statement: "A plan whose dataset carries no em-dash (U+2014) exports as a standalone HTML file that contains none either, as the character or in an escaped spelling (a JavaScript or CSS escape, an HTML character reference): the title the export composes and the string literals of the embedded renderer use other punctuation."
+    rationale: "The em-dash is barred from every delivered artifact (AI-PLAYBOOK.md universal violation #2), and the export is the artifact this engine hands to people outside it. A dataset's text is its author's to keep clean; the engine's share is the text it adds around that dataset, which reaches every export of every plan. The escaped spellings count because the renderer builds its text in the browser, so a \\u2014 in its source reaches the page as the character itself. The cockpit's plan view draws the same renderer (INT-PLANS-003), so the same scan covers the text it adds there."
+    derived_from: [EXP-001]
+    test:
+        scope: integration
+        component: ExportComposer
+        type: invariant
+    criticality: medium
