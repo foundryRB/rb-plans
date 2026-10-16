@@ -2,11 +2,11 @@
   "_comment": "The single home for the vendored renderer pin. update-vendored-renderer.sh writes this file; check_pin_drift.py and tests/test_vendor_pin.py read it. Never hand-edit either this or the vendored files - a hand-edit is a re-implementation wearing a pin's clothes, and the fork ADR-001 exists to prevent.",
   "repo": "foundryRB/rb-playbook",
   "source": "galaxies/press/skills/bootstrap-plan/renderer",
-  "ref": "d5a3eb1733558ca9f63dcfe003d79b4720d1beaa",
-  "pinned_on": "2026-10-10",
+  "ref": "8c1f2fb1bb62475268a5380cb76a749330fd3ede",
+  "pinned_on": "2026-10-16",
   "files": {
-    "plan-renderer.js": "760cc939fc134aa9c997caa279cf0fbed89ebfc0e16effe1a22d3fb7e296a6fb",
-    "plan-renderer.css": "9df6b06530f5a57ac417facfa37f78b395f27c72acfdfef576f032bf57d80b9c",
-    "plan-page.html": "1820ead54041ae35ce15311a74ab0c12554bda4e9a0212985be356a3f8df15cc"
+    "plan-renderer.js": "1ba26b924fadb17ce363cea967480606282d352f06e146af40671765ea8a548b",
+    "plan-renderer.css": "ec4b5799144ed43c0118e6336eef5ddd2b9ba3b8778e7a6130046c0629fd3703",
+    "plan-page.html": "ad2812187880a13a03b074bd9d192361ac5c20031dea8b75661cc48327c5d28e"
   }
 }

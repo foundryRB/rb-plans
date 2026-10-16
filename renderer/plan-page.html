@@ -13,141 +13,61 @@ body { margin: 0; padding: 32px; background: var(--bg); }
 @media (max-width: 640px) { body { padding: 12px; } }
 @media print { body { padding: 0; } }
 /* PRESS stage */
-/* -- The Software Engineering stage over the shell's ambient element -------------
-   Dark: gradient, grids, vignette, three drifting glows, rising motes. Light: paper, the faint
-   light grid, solid green motes, a slow neutral light - alive, and never a green wash.
-   Source: design-systems/rb-software-engineering/brand/stage_css.py render_field(). 
-   Appended after the shell's own rules, which stay as they are. Reduced motion and print stop it. */
-.stage > * { display: none !important; }                      /* the shell's own streams, blobs, particles */
-.stage {
-  position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; opacity: 1;
-  background:
-    radial-gradient(72% 72% at 50% 42%, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, 0.55) 100%) 0 0 / cover no-repeat,
-    repeating-linear-gradient(rgba(255, 255, 255, 0.022) 0 1px, transparent 1px 4px) 0 0 / auto,
-    linear-gradient(to right, rgba(0, 168, 107,  0.13) 1px, transparent 1px) 0 0 / 160px 160px,
-    linear-gradient(to bottom, rgba(0, 168, 107,  0.13) 1px, transparent 1px) 0 0 / 160px 160px,
-    linear-gradient(to right, rgba(0, 168, 107,  0.07) 1px, transparent 1px) 0 0 / 40px 40px,
-    linear-gradient(to bottom, rgba(0, 168, 107,  0.07) 1px, transparent 1px) 0 0 / 40px 40px,
-    linear-gradient(160deg, #0b0d12 0%, #070910 55%, #04050a 100%) !important;
-}
-.stage::before, .stage::after { content: "" !important; display: block !important; position: fixed; pointer-events: none; z-index: -1;
-  filter: none !important; border-radius: 0; mask: none; }
-.stage::before {
-  inset: -25vh -25vw; width: auto; height: auto;
-  background:
-    radial-gradient(closest-side, rgba(78, 224, 160,  0.30) 0%, rgba(0, 168, 107,  0.10) 55%, rgba(0, 168, 107,  0) 100%) 4vw -5vh / 81vw 95vh no-repeat,
-    radial-gradient(closest-side, rgba(27, 36, 54, 0.85) 0%, rgba(27, 36, 54, 0) 100%) 61vw 50vh / 94vw 105vh no-repeat,
-    radial-gradient(closest-side, rgba(0, 168, 107,  0.16) 0%, rgba(0, 168, 107,  0) 100%) 61vw 3vh / 69vw 75vh no-repeat !important;
-  will-change: transform;
-  animation: rb-drift-a 26s linear infinite !important;
-}
-.stage::after {
-  inset: 0 auto auto 0; width: 2px; height: 2px; border-radius: 50%; background: none !important;
-  box-shadow:
-    2.8vw 81.0vh 0 0.55px rgba(255, 107, 107, 0.58),
-    13.7vw 82.1vh 0 0.11px rgba(255, 107, 107, 0.59),
-    24.9vw 90.5vh 0 0.06px rgba(255, 107, 107, 0.53),
-    33.3vw 91.2vh 0 0.42px rgba(255, 107, 107, 0.44),
-    47.7vw 97.6vh 0 0.39px rgba(255, 107, 107, 0.63),
-    54.9vw 58.6vh 0 0.32px rgba(255, 107, 107, 0.45),
-    65.7vw 67.9vh 0 0.02px rgba(255, 107, 107, 0.58),
-    77.4vw 92.5vh 0 0.31px rgba(255, 107, 107, 0.63),
-    88.3vw 85.2vh 0 0.27px rgba(255, 107, 107, 0.52),
-    10.1vw 96.9vh 0 0.54px rgba(255, 107, 107, 0.46),
-    19.4vw 75.4vh 0 0.32px rgba(255, 107, 107, 0.47),
-    28.4vw 76.2vh 0 0.13px rgba(255, 107, 107, 0.58),
-    38.3vw 61.5vh 0 0.43px rgba(255, 107, 107, 0.56),
-    51.1vw 88.1vh 0 0.22px rgba(255, 107, 107, 0.45),
-    62.9vw 82.2vh 0 0.39px rgba(255, 107, 107, 0.63),
-    74.3vw 72.9vh 0 0.46px rgba(255, 107, 107, 0.55),
-    83.3vw 85.1vh 0 0.19px rgba(255, 107, 107, 0.46),
-    93.6vw 87.4vh 0 0.35px rgba(255, 107, 107, 0.57);
-  opacity: 0;
-  will-change: transform, opacity;
-  animation: rb-rise 15s linear -4s infinite !important;
-}
-:root[data-theme="light"] .stage {
-  background:
-    linear-gradient(to right, rgba(0, 122, 77,  0.07) 1px, transparent 1px) 0 0 / 160px 160px,
-    linear-gradient(to bottom, rgba(0, 122, 77,  0.07) 1px, transparent 1px) 0 0 / 160px 160px,
-    linear-gradient(to right, rgba(0, 122, 77,  0.035) 1px, transparent 1px) 0 0 / 40px 40px,
-    linear-gradient(to bottom, rgba(0, 122, 77,  0.035) 1px, transparent 1px) 0 0 / 40px 40px,
-    transparent !important;
-}
-:root[data-theme="light"] .stage::before {
-  background:
-    radial-gradient(closest-side, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0) 100%) 8vw 0vh / 70vw 80vh no-repeat,
-    radial-gradient(closest-side, rgba(37, 40, 43, 0.055) 0%, rgba(37, 40, 43, 0) 100%) 58vw 46vh / 80vw 90vh no-repeat !important;
-  animation-duration: 48s !important;
-}
-:root[data-theme="light"] .stage::after {
-  box-shadow:
-    2.8vw 81.0vh 0 0.55px rgba(0, 168, 107,  0.58),
-    13.7vw 82.1vh 0 0.11px rgba(0, 168, 107,  0.59),
-    24.9vw 90.5vh 0 0.06px rgba(0, 168, 107,  0.53),
-    33.3vw 91.2vh 0 0.42px rgba(0, 168, 107,  0.44),
-    47.7vw 97.6vh 0 0.39px rgba(0, 168, 107,  0.63),
-    54.9vw 58.6vh 0 0.32px rgba(0, 168, 107,  0.45),
-    65.7vw 67.9vh 0 0.02px rgba(0, 168, 107,  0.58),
-    77.4vw 92.5vh 0 0.31px rgba(0, 168, 107,  0.63),
-    88.3vw 85.2vh 0 0.27px rgba(0, 168, 107,  0.52),
-    10.1vw 96.9vh 0 0.54px rgba(0, 168, 107,  0.46),
-    19.4vw 75.4vh 0 0.32px rgba(0, 168, 107,  0.47),
-    28.4vw 76.2vh 0 0.13px rgba(0, 168, 107,  0.58),
-    38.3vw 61.5vh 0 0.43px rgba(0, 168, 107,  0.56),
-    51.1vw 88.1vh 0 0.22px rgba(0, 168, 107,  0.45),
-    62.9vw 82.2vh 0 0.39px rgba(0, 168, 107,  0.63),
-    74.3vw 72.9vh 0 0.46px rgba(0, 168, 107,  0.55),
-    83.3vw 85.1vh 0 0.19px rgba(0, 168, 107,  0.46),
-    93.6vw 87.4vh 0 0.35px rgba(0, 168, 107,  0.57);
-}
-@keyframes rb-drift-a { 0%, 100% { transform: translate(0, 0); } 33.33% { transform: translate(8.6vw, 8.7vh); } 66.67% { transform: translate(-3.9vw, 5.1vh); } }
-@keyframes rb-rise {
-  0%   { transform: translateY(0); opacity: 0; }
-  25%  { opacity: 1; }
-  70%  { opacity: 1; }
-  100% { transform: translateY(-130px); opacity: 0; }
-}
-@media print { .stage { display: none !important; } }
-@media (prefers-reduced-motion: reduce) { .stage::before, .stage::after { animation: none !important; } .stage::after { opacity: .8; } }
+/* -- The Software Engineering stage, the deck shell's own --------------------------------------------
+   Sized on its own box (positions in %, drifts and the grid in container units), so the same stage
+   fills a slide canvas or a browser window. Source: design-systems/rb-software-engineering/
+   brand/stage_css.py render_page(). Print hides it, reduced motion stops it, a hidden page pauses it. */
+[data-stage="field"]{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;container-type:size;background:linear-gradient(160deg,#0b0d12 0%,#070910 55%,#04050a 100%)}
+[data-stage="field"] [data-stage]{position:absolute;display:block}
+[data-stage^="glow"]{border-radius:50%;will-change:transform;animation-timing-function:linear;animation-iteration-count:infinite}
+[data-stage="glow-a"]{left:-21.12%;top:-30.11%;width:81.22%;height:95.06%;background:radial-gradient(closest-side,rgba(78,224,160,0.30) 0%,rgba(0,168,107,0.10) 55%,rgba(0,168,107,0) 100%);animation-name:rb-glow-a;animation-duration:26s}
+@keyframes rb-glow-a{0%,100%{transform:translate(0,0)}33.33%{transform:translate(8.57cqw,8.71cqh)}66.67%{transform:translate(-3.88cqw,5.08cqh)}}
+[data-stage="glow-b"]{left:36.02%;top:25.03%;width:93.67%;height:104.85%;background:radial-gradient(closest-side,rgba(27,36,54,0.85) 0%,rgba(27,36,54,0) 100%);animation-name:rb-glow-b;animation-duration:34s}
+@keyframes rb-glow-b{0%,100%{transform:translate(0,0)}33.33%{transform:translate(-7.04cqw,-7.44cqh)}66.67%{transform:translate(4.69cqw,-3.81cqh)}}
+[data-stage="glow-c"]{left:35.92%;top:-22.49%;width:68.78%;height:75.1%;background:radial-gradient(closest-side,rgba(0,168,107,0.16) 0%,rgba(0,168,107,0) 100%);animation-name:rb-glow-c;animation-duration:41s}
+@keyframes rb-glow-c{0%,100%{transform:translate(0,0)}33.33%{transform:translate(-5.51cqw,11.25cqh)}66.67%{transform:translate(3.16cqw,6.17cqh)}}
+[data-stage="grid"]{inset:0;background-image:repeating-linear-gradient(rgba(255,255,255,.022) 0 1px,transparent 1px 4px),linear-gradient(to right,rgba(0,168,107,.13) 1px,transparent 1px),linear-gradient(to bottom,rgba(0,168,107,.13) 1px,transparent 1px),linear-gradient(to right,rgba(0,168,107,.07) 1px,transparent 1px),linear-gradient(to bottom,rgba(0,168,107,.07) 1px,transparent 1px);background-size:auto,12.5cqw 12.5cqw,12.5cqw 12.5cqw,3.125cqw 3.125cqw,3.125cqw 3.125cqw}
+[data-stage="motes"]{inset:0}
+[data-stage="motes"]>span{position:absolute;border-radius:50%;background:#4ee0a0;opacity:0;will-change:transform,opacity;animation:rb-mote linear infinite}
+@keyframes rb-mote{0%{transform:translateY(0);opacity:0}25%{opacity:var(--mote)}70%{opacity:var(--mote)}100%{transform:translateY(-23.58cqh);opacity:0}}
+[data-stage="motes"]>span:nth-child(1){left:9.18%;top:86.17%;width:2.8px;height:2.8px;animation-duration:13s;animation-delay:-1.4s;--mote:0.69}
+[data-stage="motes"]>span:nth-child(2){left:18.98%;top:92.7%;width:2.1px;height:2.1px;animation-duration:17s;animation-delay:-6.2s;--mote:0.5}
+[data-stage="motes"]>span:nth-child(3){left:27.45%;top:77.28%;width:3.2px;height:3.2px;animation-duration:11.5s;animation-delay:-3.1s;--mote:0.75}
+[data-stage="motes"]>span:nth-child(4){left:37.96%;top:96.33%;width:2.3px;height:2.3px;animation-duration:15.5s;animation-delay:-9s;--mote:0.56}
+[data-stage="motes"]>span:nth-child(5){left:44.59%;top:81.81%;width:2.6px;height:2.6px;animation-duration:19s;animation-delay:-2.2s;--mote:0.63}
+[data-stage="motes"]>span:nth-child(6){left:52.14%;top:90.7%;width:2px;height:2px;animation-duration:12.5s;animation-delay:-7.7s;--mote:0.48}
+[data-stage="motes"]>span:nth-child(7){left:57.96%;top:75.46%;width:3.1px;height:3.1px;animation-duration:16s;animation-delay:-4.5s;--mote:0.73}
+[data-stage="motes"]>span:nth-child(8){left:65.51%;top:94.69%;width:2.4px;height:2.4px;animation-duration:14s;animation-delay:-11.3s;--mote:0.53}
+[data-stage="motes"]>span:nth-child(9){left:71.53%;top:83.81%;width:2.1px;height:2.1px;animation-duration:18.5s;animation-delay:-0.9s;--mote:0.6}
+[data-stage="motes"]>span:nth-child(10){left:78.47%;top:91.61%;width:2.9px;height:2.9px;animation-duration:12s;animation-delay:-5.6s;--mote:0.7}
+[data-stage="motes"]>span:nth-child(11){left:85%;top:78.19%;width:2.3px;height:2.3px;animation-duration:20s;animation-delay:-8.4s;--mote:0.55}
+[data-stage="motes"]>span:nth-child(12){left:91.63%;top:95.42%;width:2.6px;height:2.6px;animation-duration:15s;animation-delay:-3.7s;--mote:0.65}
+[data-stage="motes"]>span:nth-child(13){left:5%;top:74.56%;width:2px;height:2px;animation-duration:21s;animation-delay:-10.1s;--mote:0.45}
+[data-stage="motes"]>span:nth-child(14){left:23.37%;top:99.95%;width:2.8px;height:2.8px;animation-duration:13.8s;animation-delay:-12.6s;--mote:0.63}
+[data-stage="motes"]>span:nth-child(15){left:48.47%;top:99.05%;width:2.1px;height:2.1px;animation-duration:17.6s;animation-delay:-2.8s;--mote:0.5}
+[data-stage="motes"]>span:nth-child(16){left:75%;top:101.41%;width:2.4px;height:2.4px;animation-duration:16.4s;animation-delay:-6.9s;--mote:0.58}
+[data-stage="motes"]>span:nth-child(17){left:96.12%;top:87.44%;width:2.3px;height:2.3px;animation-duration:19.6s;animation-delay:-14.2s;--mote:0.54}
+[data-stage="motes"]>span:nth-child(18){left:33.57%;top:86.17%;width:2px;height:2px;animation-duration:22s;animation-delay:-1.7s;--mote:0.43}
+[data-stage="vignette"]{inset:0;background:radial-gradient(72% 72% at 50% 42%,rgba(0,0,0,0) 55%,rgba(0,0,0,.55) 100%)}
+:root[data-theme="light"] [data-stage="field"]{background:none}
+:root[data-theme="light"] [data-stage="grid"]{background-image:linear-gradient(to right,rgba(0,122,77,.07) 1px,transparent 1px),linear-gradient(to bottom,rgba(0,122,77,.07) 1px,transparent 1px),linear-gradient(to right,rgba(0,122,77,.035) 1px,transparent 1px),linear-gradient(to bottom,rgba(0,122,77,.035) 1px,transparent 1px);background-size:12.5cqw 12.5cqw,12.5cqw 12.5cqw,3.125cqw 3.125cqw,3.125cqw 3.125cqw}
+:root[data-theme="light"] [data-stage="motes"]>span{background:#00a86b}
+:root[data-theme="light"] [data-stage="vignette"]{display:none}
+:root[data-theme="light"] [data-stage="glow-a"]{background:radial-gradient(closest-side,rgba(255,255,255,0.95) 0%,rgba(255,255,255,0) 100%);animation-duration:48s}
+:root[data-theme="light"] [data-stage="glow-b"]{background:radial-gradient(closest-side,rgba(37,40,43,0.055) 0%,rgba(37,40,43,0) 100%)}
+:root[data-theme="light"] [data-stage="glow-c"]{display:none}
 @media (prefers-color-scheme: light) {
-:root:not([data-theme="dark"]) .stage {
-  background:
-    linear-gradient(to right, rgba(0, 122, 77,  0.07) 1px, transparent 1px) 0 0 / 160px 160px,
-    linear-gradient(to bottom, rgba(0, 122, 77,  0.07) 1px, transparent 1px) 0 0 / 160px 160px,
-    linear-gradient(to right, rgba(0, 122, 77,  0.035) 1px, transparent 1px) 0 0 / 40px 40px,
-    linear-gradient(to bottom, rgba(0, 122, 77,  0.035) 1px, transparent 1px) 0 0 / 40px 40px,
-    transparent !important;
+:root:not([data-theme="dark"]) [data-stage="field"]{background:none}
+:root:not([data-theme="dark"]) [data-stage="grid"]{background-image:linear-gradient(to right,rgba(0,122,77,.07) 1px,transparent 1px),linear-gradient(to bottom,rgba(0,122,77,.07) 1px,transparent 1px),linear-gradient(to right,rgba(0,122,77,.035) 1px,transparent 1px),linear-gradient(to bottom,rgba(0,122,77,.035) 1px,transparent 1px);background-size:12.5cqw 12.5cqw,12.5cqw 12.5cqw,3.125cqw 3.125cqw,3.125cqw 3.125cqw}
+:root:not([data-theme="dark"]) [data-stage="motes"]>span{background:#00a86b}
+:root:not([data-theme="dark"]) [data-stage="vignette"]{display:none}
+:root:not([data-theme="dark"]) [data-stage="glow-a"]{background:radial-gradient(closest-side,rgba(255,255,255,0.95) 0%,rgba(255,255,255,0) 100%);animation-duration:48s}
+:root:not([data-theme="dark"]) [data-stage="glow-b"]{background:radial-gradient(closest-side,rgba(37,40,43,0.055) 0%,rgba(37,40,43,0) 100%)}
+:root:not([data-theme="dark"]) [data-stage="glow-c"]{display:none}
 }
-:root:not([data-theme="dark"]) .stage::before {
-  background:
-    radial-gradient(closest-side, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0) 100%) 8vw 0vh / 70vw 80vh no-repeat,
-    radial-gradient(closest-side, rgba(37, 40, 43, 0.055) 0%, rgba(37, 40, 43, 0) 100%) 58vw 46vh / 80vw 90vh no-repeat !important;
-  animation-duration: 48s !important;
-}
-:root:not([data-theme="dark"]) .stage::after {
-  box-shadow:
-    2.8vw 81.0vh 0 0.55px rgba(0, 168, 107,  0.58),
-    13.7vw 82.1vh 0 0.11px rgba(0, 168, 107,  0.59),
-    24.9vw 90.5vh 0 0.06px rgba(0, 168, 107,  0.53),
-    33.3vw 91.2vh 0 0.42px rgba(0, 168, 107,  0.44),
-    47.7vw 97.6vh 0 0.39px rgba(0, 168, 107,  0.63),
-    54.9vw 58.6vh 0 0.32px rgba(0, 168, 107,  0.45),
-    65.7vw 67.9vh 0 0.02px rgba(0, 168, 107,  0.58),
-    77.4vw 92.5vh 0 0.31px rgba(0, 168, 107,  0.63),
-    88.3vw 85.2vh 0 0.27px rgba(0, 168, 107,  0.52),
-    10.1vw 96.9vh 0 0.54px rgba(0, 168, 107,  0.46),
-    19.4vw 75.4vh 0 0.32px rgba(0, 168, 107,  0.47),
-    28.4vw 76.2vh 0 0.13px rgba(0, 168, 107,  0.58),
-    38.3vw 61.5vh 0 0.43px rgba(0, 168, 107,  0.56),
-    51.1vw 88.1vh 0 0.22px rgba(0, 168, 107,  0.45),
-    62.9vw 82.2vh 0 0.39px rgba(0, 168, 107,  0.63),
-    74.3vw 72.9vh 0 0.46px rgba(0, 168, 107,  0.55),
-    83.3vw 85.1vh 0 0.19px rgba(0, 168, 107,  0.46),
-    93.6vw 87.4vh 0 0.35px rgba(0, 168, 107,  0.57);
-}
-}
-html[data-hidden="true"] .stage::before, html[data-hidden="true"] .stage::after { animation-play-state: paused !important; }
+@media print{[data-stage="field"]{display:none!important}}
+@media (prefers-reduced-motion: reduce){[data-stage],[data-stage] span{animation:none!important}}
+html[data-hidden="true"] [data-stage],html[data-hidden="true"] [data-stage] span{animation-play-state:paused!important}
 /* /PRESS stage */
 /* PRESS palette */
 :root,:root[data-theme="light"]{color-scheme:light;--bg:#f2f2f2;}
@@ -159,7 +79,7 @@ html[data-hidden="true"] .stage::before, html[data-hidden="true"] .stage::after 
 </head>
 <body>
 <!-- PRESS stage -->
-<div class="stage" aria-hidden="true"></div>
+<div data-stage="field" aria-hidden="true"><span data-stage="glow-a"></span><span data-stage="glow-b"></span><span data-stage="glow-c"></span><span data-stage="grid"></span><span data-stage="motes"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span data-stage="vignette"></span></div>
 <!-- /PRESS stage -->
 <noscript>This is a data-driven plan (REF-Plan): enable JavaScript to render it from the embedded dataset.</noscript>
 <div id="plan-root"></div>
