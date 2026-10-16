@@ -22,7 +22,7 @@ jobs:
         # A fork has no access to this org's ARC scale set, so its jobs would queue
         # forever; a fork falls back to a GitHub-hosted runner while our runs stay on
         # ARC (foundry-platform ADR-037 governs our runs, not a fork's).
-        runs-on: ${{ github.event.repository.fork && 'ubuntu-latest' || 'arc-dind' }}
+        runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
             - uses: actions/setup-python@v5
@@ -40,7 +40,7 @@ jobs:
         # PostgreSQL (a store-less test fails, it never skips) and
         # tests/test_renderer_bundle.py needs node to re-run the frontend's
         # own projection script.
-        runs-on: ${{ github.event.repository.fork && 'ubuntu-latest' || 'arc-dind' }}
+        runs-on: ubuntu-latest
         services:
             postgres:
                 image: postgres:16
@@ -73,7 +73,7 @@ jobs:
     vitest:
         # frontend/'s own suite, including the MVVM-boundary import-direction
         # check (INT-PLANS-029).
-        runs-on: ${{ github.event.repository.fork && 'ubuntu-latest' || 'arc-dind' }}
+        runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v4
@@ -87,7 +87,7 @@ jobs:
     playwright:
         # The 15 self-contained e2e claims, against the app's own stack -
         # both webServer entries in e2e/playwright.config.ts start cold here.
-        runs-on: ${{ github.event.repository.fork && 'ubuntu-latest' || 'arc-dind' }}
+        runs-on: ubuntu-latest
         services:
             postgres:
                 image: postgres:16
@@ -137,7 +137,7 @@ jobs:
     docs:
         # The docs site canonical STARLIGHT conformance suite.
         # Dependencies use the committed lockfile.
-        runs-on: ${{ github.event.repository.fork && 'ubuntu-latest' || 'arc-dind' }}
+        runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v4

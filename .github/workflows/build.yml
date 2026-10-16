@@ -16,6 +16,7 @@ jobs:
         uses: foundryRB/rb-ci/.github/workflows/build.yml@main
         with:
             app-name: rb-plans
+            runner: ubuntu-latest
         permissions:
             contents: write
             packages: write
