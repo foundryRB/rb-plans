@@ -13,8 +13,8 @@
     --foreground: 210 8% 15.7%;
     --card: 0 0% 100%;
     --card-foreground: 210 8% 15.7%;
-    --primary: 0 100% 45.1%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 158 100% 33%;
+    --primary-foreground: 0 0% 4%;
     --secondary: 0 0% 94.9%;
     --secondary-foreground: 210 8% 15.7%;
     --muted: 0 0% 94.9%;
@@ -51,8 +51,8 @@
         --foreground: 220 30% 96.1%;
         --card: 222 23% 8.6%;
         --card-foreground: 220 30% 96.1%;
-        --primary: 0 100% 45.1%;
-        --primary-foreground: 0 0% 100%;
+        --primary: 158 100% 33%;
+        --primary-foreground: 0 0% 4%;
         --secondary: 223 24% 5.7%;
         --secondary-foreground: 220 30% 96.1%;
         --muted: 223 24% 5.7%;
@@ -80,8 +80,8 @@
     --foreground: 220 30% 96.1%;
     --card: 222 23% 8.6%;
     --card-foreground: 220 30% 96.1%;
-    --primary: 0 100% 45.1%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 158 100% 33%;
+    --primary-foreground: 0 0% 4%;
     --secondary: 223 24% 5.7%;
     --secondary-foreground: 220 30% 96.1%;
     --muted: 223 24% 5.7%;
@@ -265,8 +265,8 @@ table.chrome-table tr.row-link:hover { background: hsl(var(--accent)); }
 .pending-rail h3 { margin: 0 0 0.5rem; font-size: 0.9rem; }
 .pending-rail ul { margin: 0; padding-left: 1.2rem; font-size: 0.85rem; }
 
-:root{--brand:0 100% 45.1%;--brand-ink:0 0% 100%;--primary:0 100% 45.1%;--link:0 100% 38.4%}
-:root[data-theme="dark"]{--link:0 100% 71%}
+:root{--brand:158 100% 33%;--brand-ink:0 0% 4%;--primary:158 100% 33%;--link:158 100% 24%}
+:root[data-theme="dark"]{--link:154 70% 59%}
 
 /* Application atmosphere stays outside reading and editing surfaces. */
 body{isolation:isolate;font-family:var(--font-sans);font-weight:400}
