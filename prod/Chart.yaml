@@ -1,0 +1,9 @@
+apiVersion: v2
+name: rb-plans
+description: prod environment pin for rb-plans (ADR-025 deploy branch).
+type: application
+version: 1.0.0
+dependencies:
+  - name: rb-plans
+    version: 1.0.0
+    repository: oci://ghcr.io/foundryrb/charts

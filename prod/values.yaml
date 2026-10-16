@@ -1,0 +1,28 @@
+# Per-install values. Keys here are THIS install's own facts, pinned
+# explicitly: the app chart's defaults belong to whichever install it was
+# authored against, and an omitted key inherits them silently.
+# Sign-in goes through this install's rb-plans realm (granted in teams/rb-plans); the
+# database is this install's shared cluster (granted in teams/rb-plans too).
+rb-plans:
+  host: rb-plans.rb-foundry.com
+  auth:
+    oidc:
+      issuer: https://keycloak.rb-foundry.com/realms/rb-plans
+      clientId: rb-plans
+      existingSecret: keycloak-rb-plans
+  database:
+    enabled: true
+    host: shared-rw.databases.svc.cluster.local
+    port: 5432
+    name: rb-plans
+    user: rb-plans
+    existingSecret: pg-app-rb-plans
+  events:
+    enabled: false
+  images:
+    app:
+      repository: ghcr.io/foundryrb/rb-plans-app
+      tag: 1.0.0
+    docs:
+      repository: ghcr.io/foundryrb/rb-plans-docs
+      tag: 1.0.0
